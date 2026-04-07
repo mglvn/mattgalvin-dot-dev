@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro";
 
 export const GET: APIRoute = async ({ locals, params }) => {
-  const bucket = locals.runtime.env.ASSETS as R2Bucket;
+  const bucket = locals.runtime.env.MEDIA as R2Bucket;
   const key = params.key;
 
   if (!key) return new Response(null, { status: 404 });

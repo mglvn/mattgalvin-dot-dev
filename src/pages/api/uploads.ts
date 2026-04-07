@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro";
 
 export const POST: APIRoute = async ({ locals, request }) => {
-  const bucket = locals.runtime.env.ASSETS as R2Bucket;
+  const bucket = locals.runtime.env.MEDIA as R2Bucket;
 
   const formData = await request.formData();
   const file = formData.get("file") as File | null;
