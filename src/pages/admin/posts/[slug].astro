@@ -11,6 +11,7 @@ if (!post) {
 }
 
 const tags = parseTags(post.tags).join(", ");
+const viewHref = post.type === "projects" ? `/work/${post.slug}` : `/blog/${post.slug}`;
 ---
 
 <!doctype html>
@@ -42,7 +43,7 @@ const tags = parseTags(post.tags).join(", ");
       <div style="display: flex; align-items: center; gap: 1.5rem;">
         {post.published && (
           <a
-            href={`/blog/${post.slug}`}
+            href={viewHref}
             target="_blank"
             style="font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; color: #8a8076; text-decoration: none;"
           >
@@ -57,22 +58,18 @@ const tags = parseTags(post.tags).join(", ");
       </div>
     </header>
 
-    <main style="max-width: 860px; margin: 0 auto; padding: 3rem 2rem 6rem;">
-
-      <p id="status" style="font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 0.06em; min-height: 1.2em; color: #8a8076; margin-bottom: 1.5rem;"></p>
-
-      <form id="post-form" style="display: flex; flex-direction: column; gap: 1.75rem;">
+    <main style="max-width: 1000px; margin: 0 auto; padding: 3rem 2rem 6rem;">
+      <form id="post-form" style="display: flex; flex-direction: column; gap: 2rem;">
 
         <!-- Title + slug -->
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
           <div>
             <label class="field-label">Title</label>
             <input id="title" name="title" type="text" required class="field-input" value={post.title} />
           </div>
           <div>
             <label class="field-label">Slug</label>
-            <input id="slug-display" type="text" class="field-input" value={post.slug} disabled
-              style="font-family: 'Space Mono', monospace; font-size: 0.8rem; opacity: 0.5; cursor: not-allowed;" />
+            <input type="text" class="field-input field-input--mono field-input--disabled" value={post.slug} disabled />
           </div>
         </div>
 
@@ -84,14 +81,29 @@ const tags = parseTags(post.tags).join(", ");
 
         <!-- Body -->
         <div>
-          <label class="field-label">Body (Markdown)</label>
+          <label class="field-label">Body</label>
           <MarkdownEditor value={post.body} />
         </div>
 
+        <!-- Hero image -->
+        <div>
+          <label class="field-label">Hero Image</label>
+          <div style="display: flex; gap: 0.75rem; align-items: stretch;">
+            <input id="hero_image" name="hero_image" type="text" class="field-input" value={post.hero_image} placeholder="URL or upload →" style="flex: 1;" />
+            <label class="btn-upload" title="Upload image">
+              Upload
+              <input type="file" id="hero-upload-input" accept="image/*" style="display:none;" />
+            </label>
+          </div>
+          <div id="hero-preview-wrap" style={`margin-top: 0.75rem; display: ${post.hero_image ? 'block' : 'none'};`}>
+            <img id="hero-preview" src={post.hero_image || undefined} alt="" style="max-height: 160px; max-width: 100%; object-fit: cover; border: 1px solid #ccc5b8;" />
+          </div>
+        </div>
+
         <!-- Meta row -->
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 1.25rem; align-items: end;">
+        <div style="background: #ede8de; border: 1px solid #ccc5b8; padding: 1.5rem; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 1.5rem; align-items: end;">
           <div>
-            <label class="field-label">Tags (comma separated)</label>
+            <label class="field-label">Tags</label>
             <input id="tags" name="tags" type="text" class="field-input" value={tags} placeholder="Go, TypeScript" />
           </div>
           <div>
@@ -116,18 +128,16 @@ const tags = parseTags(post.tags).join(", ");
         </div>
 
         <!-- Published + submit -->
-        <div style="display: flex; align-items: center; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #ccc5b8;">
-          <label style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer; font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase; color: #8a8076;">
+        <div style="display: flex; align-items: center; justify-content: space-between; padding-top: 0.75rem; border-top: 1px solid #ccc5b8;">
+          <label style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer; font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: #8a8076;">
             <input id="published" name="published" type="checkbox" checked={post.published === 1}
-              style="width: 14px; height: 14px; accent-color: #1a1612;" />
+              style="width: 15px; height: 15px; accent-color: #1a1612;" />
             Published
           </label>
-          <button
-            type="submit"
-            style="font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: #f2ede3; background: #1a1612; border: none; cursor: pointer; padding: 0.7rem 1.5rem;"
-          >
-            Save changes
-          </button>
+          <div style="display: flex; align-items: center; gap: 1rem;">
+            <span id="save-status" style="font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.06em; color: #6a8a6a; opacity: 0; transition: opacity 0.3s;"></span>
+            <button id="save-btn" type="submit" class="btn-save">Save changes</button>
+          </div>
         </div>
 
       </form>
@@ -137,36 +147,110 @@ const tags = parseTags(post.tags).join(", ");
       .field-label {
         display: block;
         font-family: 'Space Mono', monospace;
-        font-size: 0.6rem;
-        letter-spacing: 0.1em;
+        font-size: 0.7rem;
+        letter-spacing: 0.08em;
         text-transform: uppercase;
-        color: #8a8076;
-        margin-bottom: 0.4rem;
+        color: #6a6460;
+        margin-bottom: 0.5rem;
       }
       .field-input {
         width: 100%;
         box-sizing: border-box;
-        padding: 0.65rem 0.85rem;
+        padding: 0.75rem 1rem;
         background: transparent;
         border: 1px solid #ccc5b8;
         font-family: 'DM Sans', system-ui, sans-serif;
-        font-size: 0.9rem;
+        font-size: 1rem;
         font-weight: 300;
         color: #1a1612;
         outline: none;
         appearance: none;
       }
       .field-input:focus { border-color: #8a8076; }
+      .field-input--mono { font-family: 'Space Mono', monospace; font-size: 0.85rem; }
+      .field-input--disabled { opacity: 0.45; cursor: not-allowed; }
+      .btn-save {
+        font-family: 'Space Mono', monospace;
+        font-size: 0.7rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: #f2ede3;
+        background: #1a1612;
+        border: none;
+        cursor: pointer;
+        padding: 0.75rem 1.75rem;
+        transition: background 0.2s;
+      }
+      .btn-save:disabled { opacity: 0.6; cursor: not-allowed; }
+      .btn-save.is-success { background: #4a7a4a; }
+      .btn-save.is-error { background: #b5421a; }
+      .btn-upload {
+        font-family: 'Space Mono', monospace;
+        font-size: 0.7rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #8a8076;
+        background: #ede8de;
+        border: 1px solid #ccc5b8;
+        cursor: pointer;
+        padding: 0 1.25rem;
+        display: flex;
+        align-items: center;
+        white-space: nowrap;
+        transition: color 0.15s;
+      }
+      .btn-upload:hover { color: #1a1612; }
     </style>
 
     <script define:vars={{ slug: post.slug }}>
+      // Hero image upload
+      const heroInput = document.getElementById("hero_image");
+      const heroUpload = document.getElementById("hero-upload-input");
+      const heroPreviewWrap = document.getElementById("hero-preview-wrap");
+      const heroPreview = document.getElementById("hero-preview");
+
+      heroUpload.addEventListener("change", async () => {
+        const file = heroUpload.files?.[0];
+        if (!file) return;
+        const label = heroUpload.closest("label");
+        label.textContent = "Uploading…";
+        try {
+          const fd = new FormData();
+          fd.append("file", file);
+          const res = await fetch("/api/uploads", { method: "POST", body: fd });
+          if (!res.ok) throw new Error();
+          const { url } = await res.json();
+          heroInput.value = url;
+          heroPreview.src = url;
+          heroPreviewWrap.style.display = "block";
+        } catch {
+          alert("Upload failed.");
+        } finally {
+          label.innerHTML = 'Upload<input type="file" id="hero-upload-input" accept="image/*" style="display:none;" />';
+          label.querySelector("input").addEventListener("change", heroUpload.onchange);
+        }
+      });
+
+      heroInput.addEventListener("input", () => {
+        const url = heroInput.value.trim();
+        if (url) {
+          heroPreview.src = url;
+          heroPreviewWrap.style.display = "block";
+        } else {
+          heroPreviewWrap.style.display = "none";
+        }
+      });
+
       const form = document.getElementById("post-form");
-      const statusEl = document.getElementById("status");
+      const saveBtn = document.getElementById("save-btn");
+      const saveStatus = document.getElementById("save-status");
 
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
-        statusEl.textContent = "Saving…";
-        statusEl.style.color = "#8a8076";
+        saveBtn.textContent = "Saving…";
+        saveBtn.disabled = true;
+        saveBtn.classList.remove("is-success", "is-error");
+        saveStatus.style.opacity = "0";
 
         const tagsRaw = document.getElementById("tags").value;
         const tags = tagsRaw.split(",").map((t) => t.trim()).filter(Boolean);
@@ -180,6 +264,7 @@ const tags = parseTags(post.tags).join(", ");
           status:      document.getElementById("status-select").value,
           published:   document.getElementById("published").checked,
           date:        document.getElementById("date").value,
+          hero_image:  document.getElementById("hero_image").value,
         };
 
         const res = await fetch(`/api/posts/${slug}`, {
@@ -189,13 +274,25 @@ const tags = parseTags(post.tags).join(", ");
         });
 
         if (res.ok) {
-          statusEl.textContent = "Saved.";
-          statusEl.style.color = "#6a8a6a";
-          setTimeout(() => { statusEl.textContent = ""; }, 2000);
+          saveBtn.textContent = "Saved ✓";
+          saveBtn.classList.add("is-success");
+          setTimeout(() => {
+            saveBtn.textContent = "Save changes";
+            saveBtn.classList.remove("is-success");
+            saveBtn.disabled = false;
+          }, 2000);
         } else {
           const err = await res.json();
-          statusEl.textContent = err.error ?? "Failed to save.";
-          statusEl.style.color = "#b5421a";
+          saveBtn.textContent = "Failed";
+          saveBtn.classList.add("is-error");
+          saveStatus.textContent = err.error ?? "Something went wrong.";
+          saveStatus.style.color = "#b5421a";
+          saveStatus.style.opacity = "1";
+          setTimeout(() => {
+            saveBtn.textContent = "Save changes";
+            saveBtn.classList.remove("is-error");
+            saveBtn.disabled = false;
+          }, 3000);
         }
       });
     </script>

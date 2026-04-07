@@ -20,21 +20,28 @@ const projects = await listPosts(db, "projects", true);
     {projects.length === 0 ? (
       <p style="font-size: 0.875rem; color: #8a8076; font-weight: 300;">No projects yet.</p>
     ) : (
-      <div class="anim-2" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5px; background: #ccc5b8;">
+      <div class="anim-2 card-grid">
         {projects.map((p, i) => (
-          <a href={`/work/${p.slug}`} class="work-card" style="background: #f2ede3; padding: 2.5rem; display: flex; flex-direction: column; gap: 1.25rem; text-decoration: none; color: inherit;">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <span style="font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; color: #ccc5b8;">{String(i + 1).padStart(2, "0")}</span>
-              <span style="font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.08em; color: #b5421a;">{p.date.slice(0, 4)} ↗</span>
-            </div>
-            <div>
-              <h2 class="font-display" style="font-size: 1.75rem; font-weight: 500; letter-spacing: -0.01em; line-height: 1.1; margin-bottom: 0.75rem;">{p.title}</h2>
-              <p style="font-size: 0.9rem; line-height: 1.65; color: #6a6460; font-weight: 300;">{p.description}</p>
-            </div>
-            <div style="display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: auto;">
-              {parseTags(p.tags).map((t) => (
-                <span style="font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.25rem 0.6rem; border: 1px solid #ccc5b8; color: #8a8076;">{t}</span>
-              ))}
+          <a href={`/work/${p.slug}`} class="card">
+            {p.hero_image && (
+              <div class="card-img-wrap">
+                <img src={p.hero_image} alt={p.title} class="card-img" loading="lazy" />
+              </div>
+            )}
+            <div class="card-body">
+              <div class="card-meta">
+                <span class="card-num">{String(i + 1).padStart(2, "0")}</span>
+                <span class="card-year">{p.date.slice(0, 4)} ↗</span>
+              </div>
+              <h2 class="card-title font-display">{p.title}</h2>
+              {p.description && <p class="card-desc">{p.description}</p>}
+              {parseTags(p.tags).length > 0 && (
+                <div class="card-tags">
+                  {parseTags(p.tags).map((t) => (
+                    <span class="card-tag">{t}</span>
+                  ))}
+                </div>
+              )}
             </div>
           </a>
         ))}
@@ -42,3 +49,108 @@ const projects = await listPosts(db, "projects", true);
     )}
   </div>
 </Layout>
+
+<style>
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    background: #ccc5b8;
+  }
+  @media (max-width: 768px) {
+    .card-grid { grid-template-columns: 1fr; }
+  }
+
+  .card {
+    background: #f2ede3;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    overflow: hidden;
+  }
+
+  .card-img-wrap {
+    overflow: hidden;
+    aspect-ratio: 3 / 2;
+  }
+
+  .card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+
+  .card:hover .card-img {
+    transform: scale(1.03);
+  }
+
+  .card-body {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    flex: 1;
+  }
+
+  .card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .card-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    color: #ccc5b8;
+  }
+
+  .card-year {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    color: #b5421a;
+  }
+
+  .card-title {
+    font-size: 1.5rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+    margin: 0;
+    transition: color 0.2s;
+  }
+
+  .card:hover .card-title {
+    color: #b5421a;
+  }
+
+  .card-desc {
+    font-size: 0.875rem;
+    line-height: 1.65;
+    color: #6a6460;
+    font-weight: 300;
+    margin: 0;
+  }
+
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-top: auto;
+    padding-top: 0.5rem;
+  }
+
+  .card-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.5rem;
+    border: 1px solid #ccc5b8;
+    color: #8a8076;
+  }
+</style>

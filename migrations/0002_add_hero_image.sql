@@ -1,0 +1,1 @@
+ALTER TABLE posts ADD COLUMN hero_image TEXT NOT NULL DEFAULT '';

@@ -27,7 +27,7 @@ const pathname = Astro.url.pathname;
         Matt Galvin
       </a>
       <div style="display: flex; gap: 2.5rem; align-items: center;">
-        <a href="/#work" class="nav-link" class:list={[{ "!text-ink": pathname === "/" }]}>Work</a>
+        <a href="/work" class="nav-link" class:list={[{ "!text-ink": pathname === "/" }]}>Projects</a>
         <a href="/blog" class="nav-link" class:list={[{ "!text-ink": pathname.startsWith("/blog") }]}>Blog</a>
         <a href="/about" class="nav-link" class:list={[{ "!text-ink": pathname === "/about" }]}>About</a>
       </div>
