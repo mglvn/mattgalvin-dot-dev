@@ -1,0 +1,71 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="About" description="About Matt Galvin — designer and developer.">
+  <div style="padding-top: 10rem; padding-bottom: 4rem; padding-left: 2.5rem; padding-right: 2.5rem; max-width: 1200px; margin: 0 auto;">
+
+    <!-- Header -->
+    <div class="anim-1" style="margin-bottom: 5rem;">
+      <p style="font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: #8a8076; margin-bottom: 1rem;">About</p>
+      <h1 class="font-display" style="font-size: clamp(3rem, 9vw, 9rem); font-weight: 300; line-height: 0.9; letter-spacing: -0.02em;">
+        Nice to<br />
+        <em style="font-style: italic; color: #b5421a;">meet you.</em>
+      </h1>
+    </div>
+
+    <!-- Two-column content -->
+    <div class="anim-2" style="display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: start; border-top: 1px solid #ccc5b8; padding-top: 4rem;">
+
+      <!-- Left: photo placeholder -->
+      <div>
+        <div style="aspect-ratio: 3/4; background: #e6e0d4; display: flex; align-items: end; justify-content: start; padding: 1.5rem; position: relative; overflow: hidden;">
+          <!-- Decorative texture -->
+          <div style="position: absolute; inset: 0; background: repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(0,0,0,0.015) 2px, rgba(0,0,0,0.015) 4px);"></div>
+          <span style="font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: #8a8076; position: relative; z-index: 1;">Photo coming soon</span>
+        </div>
+      </div>
+
+      <!-- Right: bio -->
+      <div style="display: flex; flex-direction: column; gap: 2rem; padding-top: 1rem;">
+
+        <p class="font-display" style="font-size: 1.6rem; font-weight: 400; line-height: 1.5; letter-spacing: -0.01em; color: #1a1612;">
+          I'm Matt — a designer and developer who cares deeply about craft, clarity, and the space between the two.
+        </p>
+
+        <div style="display: flex; flex-direction: column; gap: 1.25rem; font-size: 0.95rem; line-height: 1.75; font-weight: 300; color: #3d3830;">
+          <p>
+            I've spent the past several years building products across the full stack — from the pixel details of a UI to the infrastructure underneath. I'm most at home working in that rare intersection where design and engineering stop fighting each other.
+          </p>
+          <p>
+            Right now I'm focused on [what you're focused on]. Previously I worked at [past companies or projects]. Before that, [whatever came before].
+          </p>
+          <p>
+            Outside of work, you'll find me [hobbies, interests, things that make you a human].
+          </p>
+        </div>
+
+        <!-- Skills/stack -->
+        <div style="padding-top: 1.5rem; border-top: 1px solid #ccc5b8;">
+          <p style="font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: #8a8076; margin-bottom: 1rem;">Currently working with</p>
+          <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+            {["TypeScript", "React", "Astro", "Go", "Postgres", "Tailwind", "Cloudflare"].map((s) => (
+              <span style="font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.3rem 0.7rem; border: 1px solid #ccc5b8; color: #8a8076;">{s}</span>
+            ))}
+          </div>
+        </div>
+
+        <!-- Links -->
+        <div style="display: flex; flex-direction: column; gap: 0.75rem; padding-top: 0.5rem;">
+          <a href="https://github.com/mglvn" class="link-arrow" target="_blank" rel="noopener">
+            GitHub ↗
+          </a>
+          <a href="mailto:hello@mattgalvin.dev" class="link-arrow">
+            hello@mattgalvin.dev →
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</Layout>

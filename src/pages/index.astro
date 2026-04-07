@@ -1,10 +1,185 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import "../styles/global.css";
+
+const projects = [
+  {
+    num: "01",
+    year: "2025",
+    title: "Project Alpha",
+    description: "A brief description of what this project is, why it matters, and what problem it solves for the people who use it.",
+    tags: ["React", "TypeScript", "Node"],
+    href: "#",
+  },
+  {
+    num: "02",
+    year: "2025",
+    title: "Project Beta",
+    description: "Another project that showcases a different side of your craft — design-led, thoughtful, and built to last.",
+    tags: ["Astro", "Tailwind", "Cloudflare"],
+    href: "#",
+  },
+  {
+    num: "03",
+    year: "2024",
+    title: "Project Gamma",
+    description: "A challenging problem with an elegant solution. Sometimes the best engineering is the kind you never notice.",
+    tags: ["Go", "PostgreSQL", "Docker"],
+    href: "#",
+  },
+];
+
+const posts = [
+  {
+    date: "Apr 2026",
+    slug: "#",
+    title: "The Art of Saying No to Features",
+    excerpt: "How constraint breeds creativity in software design.",
+  },
+  {
+    date: "Mar 2026",
+    slug: "#",
+    title: "Building With the Grain",
+    excerpt: "Why fighting your tools is usually the wrong move.",
+  },
+  {
+    date: "Feb 2026",
+    slug: "#",
+    title: "On Shipping Imperfect Things",
+    excerpt: "Done is better than perfect, but not as simple as it sounds.",
+  },
+];
 ---
 
 <Layout title="Home">
-  <main class="min-h-screen flex items-center justify-center">
-    <h1 class="text-4xl font-bold">Hello World</h1>
-  </main>
+  <!-- HERO -->
+  <section style="min-height: 100svh; display: flex; flex-direction: column; padding: 0 2.5rem;">
+    <!-- Spacer for nav -->
+    <div style="height: 6rem;"></div>
+
+    <!-- Main hero content -->
+    <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; max-width: 1200px; width: 100%; margin: 0 auto; gap: 2rem;">
+
+      <!-- Name -->
+      <div class="anim-1">
+        <h1 class="font-display" style="font-size: clamp(5.5rem, 14vw, 15rem); font-weight: 300; line-height: 0.88; letter-spacing: -0.02em; color: #1a1612;">
+          Matt<br />
+          <em style="font-style: italic; color: #b5421a;">Galvin</em>
+        </h1>
+      </div>
+
+      <!-- Divider + sub row -->
+      <div class="anim-2" style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: end; padding-top: 1rem; border-top: 1px solid #ccc5b8;">
+
+        <div>
+          <p style="font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: #8a8076; margin-bottom: 0.5rem;">
+            Designer &amp; Developer
+          </p>
+          <p style="font-size: 0.85rem; color: #8a8076;">
+            Based somewhere beautiful.
+          </p>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+          <p style="font-size: 1.05rem; font-weight: 300; line-height: 1.65; color: #3d3830; max-width: 36ch;">
+            I build things for the web — products, tools, and experiences that feel as good as they work.
+          </p>
+          <a href="#work" class="link-arrow">
+            View my work
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll hint -->
+    <div class="anim-fade" style="padding-bottom: 2.5rem; max-width: 1200px; width: 100%; margin: 0 auto;">
+      <span style="font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: #ccc5b8;">
+        Scroll ↓
+      </span>
+    </div>
+  </section>
+
+  <!-- WORK -->
+  <section id="work" style="padding: 7rem 2.5rem; max-width: 1200px; margin: 0 auto;">
+
+    <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 3rem;">
+      <div style="display: flex; align-items: baseline; gap: 1rem;">
+        <span style="font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: #ccc5b8;">01</span>
+        <h2 class="font-display" style="font-size: clamp(2rem, 5vw, 4rem); font-weight: 400; line-height: 1; letter-spacing: -0.01em;">Selected Work</h2>
+      </div>
+      <a href="/work" class="link-arrow">
+        All projects
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5px; background: #ccc5b8;">
+      {projects.map((p) => (
+        <a href={p.href} class="work-card" style="background: #f2ede3; padding: 2.5rem; display: flex; flex-direction: column; gap: 1.25rem; text-decoration: none; color: inherit;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; color: #ccc5b8;">{p.num}</span>
+            <span style="font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.08em; color: #b5421a; display: flex; align-items: center; gap: 0.3em;">{p.year} ↗</span>
+          </div>
+          <div>
+            <h3 class="font-display" style="font-size: 1.75rem; font-weight: 500; letter-spacing: -0.01em; line-height: 1.1; margin-bottom: 0.75rem;">{p.title}</h3>
+            <p style="font-size: 0.9rem; line-height: 1.65; color: #6a6460; font-weight: 300;">{p.description}</p>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: auto;">
+            {p.tags.map((t) => (
+              <span style="font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.25rem 0.6rem; border: 1px solid #ccc5b8; color: #8a8076;">{t}</span>
+            ))}
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- WRITING -->
+  <section id="blog" style="padding: 7rem 2.5rem; max-width: 1200px; margin: 0 auto;">
+
+    <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 3rem;">
+      <div style="display: flex; align-items: baseline; gap: 1rem;">
+        <span style="font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: #ccc5b8;">02</span>
+        <h2 class="font-display" style="font-size: clamp(2rem, 5vw, 4rem); font-weight: 400; line-height: 1; letter-spacing: -0.01em;">Writing</h2>
+      </div>
+      <a href="/blog" class="link-arrow">
+        All posts
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
+    <div style="border-top: 1px solid #ccc5b8;">
+      {posts.map((p) => (
+        <a href={p.slug} class="blog-row" style="display: grid; grid-template-columns: 7rem 1fr; gap: 2rem; align-items: baseline; padding: 1.75rem 1rem; border-bottom: 1px solid #ccc5b8; text-decoration: none; color: inherit;">
+          <span style="font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.08em; color: #8a8076; padding-top: 0.2rem;">{p.date}</span>
+          <div>
+            <h3 class="font-display" style="font-size: 1.4rem; font-weight: 500; letter-spacing: -0.01em; margin-bottom: 0.3rem; transition: color 0.2s;">
+              {p.title}
+            </h3>
+            <p style="font-size: 0.875rem; color: #8a8076; font-weight: 300;">{p.excerpt}</p>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- DIVIDER CTA -->
+  <section style="padding: 7rem 2.5rem; max-width: 1200px; margin: 0 auto; text-align: center;">
+    <p class="font-display" style="font-size: clamp(2rem, 6vw, 5rem); font-weight: 300; line-height: 1.15; letter-spacing: -0.02em; color: #1a1612; margin-bottom: 2rem;">
+      Let's build something<br />
+      <em style="color: #b5421a; font-style: italic;">together.</em>
+    </p>
+    <a href="mailto:hello@mattgalvin.dev" class="link-arrow" style="font-size: 0.8rem;">
+      Get in touch
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+  </section>
 </Layout>

@@ -3,8 +3,8 @@ interface Props {
   title: string;
   description?: string;
 }
-
-const { title, description } = Astro.props;
+const { title, description = "Matt Galvin — Designer & Developer" } = Astro.props;
+const pathname = Astro.url.pathname;
 ---
 
 <!doctype html>
@@ -12,11 +12,42 @@ const { title, description } = Astro.props;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{title}</title>
-    {description && <meta name="description" content={description} />}
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title === "Home" ? "Matt Galvin" : `${title} — Matt Galvin`}</title>
+    <meta name="description" content={description} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Space+Mono&display=swap"
+      rel="stylesheet"
+    />
   </head>
-  <body>
+  <body style="background: #f2ede3;">
+    <nav style="position: fixed; top: 0; left: 0; right: 0; z-index: 50; padding: 1.5rem 2.5rem; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(to bottom, #f2ede3ee, transparent);">
+      <a href="/" style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.05rem; font-weight: 500; letter-spacing: 0.02em; color: #1a1612; text-decoration: none;">
+        Matt Galvin
+      </a>
+      <div style="display: flex; gap: 2.5rem; align-items: center;">
+        <a href="/#work" class="nav-link" class:list={[{ "!text-ink": pathname === "/" }]}>Work</a>
+        <a href="/blog" class="nav-link" class:list={[{ "!text-ink": pathname.startsWith("/blog") }]}>Blog</a>
+        <a href="/about" class="nav-link" class:list={[{ "!text-ink": pathname === "/about" }]}>About</a>
+      </div>
+    </nav>
+
     <slot />
+
+    <footer style="padding: 3rem 2.5rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #ccc5b8; margin-top: 6rem;">
+      <span style="font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: #8a8076;">
+        © 2026 Matt Galvin
+      </span>
+      <div style="display: flex; gap: 2rem;">
+        <a href="https://github.com/mglvn" class="nav-link" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://twitter.com" class="nav-link" target="_blank" rel="noopener">Twitter</a>
+        <a href="mailto:hello@mattgalvin.dev" class="nav-link">Email</a>
+      </div>
+    </footer>
   </body>
 </html>
+
+<style is:global>
+  @import "../styles/global.css";
+</style>
