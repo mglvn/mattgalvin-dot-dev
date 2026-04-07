@@ -1,0 +1,129 @@
+---
+import { listPosts, formatDate } from "../../lib/db";
+
+const db = Astro.locals.runtime.env.DB;
+const posts = await listPosts(db, undefined, false);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin — Matt Galvin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&family=Space+Mono&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body style="background: #f2ede3; margin: 0; min-height: 100svh; font-family: 'DM Sans', system-ui, sans-serif;">
+
+    <!-- Top bar -->
+    <header style="position: sticky; top: 0; z-index: 10; background: #f2ede3; border-bottom: 1px solid #ccc5b8; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center;">
+      <div style="display: flex; align-items: center; gap: 2rem;">
+        <a href="/" style="font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: #8a8076; text-decoration: none;">
+          mattgalvin.dev
+        </a>
+        <span style="color: #ccc5b8;">|</span>
+        <span style="font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase; color: #1a1612;">
+          Admin
+        </span>
+      </div>
+      <form method="POST" action="/api/auth/logout">
+        <button type="submit" style="font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; color: #8a8076; background: none; border: none; cursor: pointer; padding: 0;">
+          Sign out
+        </button>
+      </form>
+    </header>
+
+    <main style="max-width: 1100px; margin: 0 auto; padding: 3rem 2rem;">
+
+      <!-- Page heading -->
+      <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 2.5rem;">
+        <h1 style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 2.5rem; font-weight: 400; letter-spacing: -0.01em; color: #1a1612; margin: 0;">
+          Posts
+        </h1>
+        <a
+          href="/admin/posts/new"
+          style="font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: #f2ede3; background: #1a1612; text-decoration: none; padding: 0.6rem 1.25rem; display: inline-block;"
+        >
+          + New post
+        </a>
+      </div>
+
+      {posts.length === 0 ? (
+        <p style="font-size: 0.875rem; color: #8a8076; font-weight: 300;">No posts yet.</p>
+      ) : (
+        <div style="border-top: 1px solid #ccc5b8;">
+          {posts.map((p) => (
+            <div
+              class="post-row"
+              data-slug={p.slug}
+              style="display: grid; grid-template-columns: 5.5rem 1fr auto; gap: 1.5rem; align-items: center; padding: 1.25rem 0.5rem; border-bottom: 1px solid #ccc5b8;"
+            >
+              <span style="font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.06em; color: #8a8076;">
+                {formatDate(p.date)}
+              </span>
+              <div style="min-width: 0;">
+                <div style="display: flex; align-items: baseline; gap: 0.75rem; flex-wrap: wrap;">
+                  <span style="font-size: 0.95rem; font-weight: 400; color: #1a1612; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    {p.title}
+                  </span>
+                  <span style={`font-family: 'Space Mono', monospace; font-size: 0.55rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.15rem 0.5rem; border: 1px solid ${p.type === 'blog' ? '#ccc5b8' : '#b5421a'}; color: ${p.type === 'blog' ? '#8a8076' : '#b5421a'};`}>
+                    {p.type}
+                  </span>
+                  {p.published ? (
+                    <span style="font-family: 'Space Mono', monospace; font-size: 0.55rem; letter-spacing: 0.06em; text-transform: uppercase; color: #6a8a6a;">
+                      live
+                    </span>
+                  ) : (
+                    <span style="font-family: 'Space Mono', monospace; font-size: 0.55rem; letter-spacing: 0.06em; text-transform: uppercase; color: #ccc5b8;">
+                      draft
+                    </span>
+                  )}
+                </div>
+                <span style="font-family: 'Space Mono', monospace; font-size: 0.55rem; letter-spacing: 0.04em; color: #ccc5b8;">
+                  /{p.slug}
+                </span>
+              </div>
+              <div style="display: flex; gap: 1rem; align-items: center; flex-shrink: 0;">
+                <a
+                  href={`/admin/posts/${p.slug}`}
+                  style="font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; color: #8a8076; text-decoration: none;"
+                >
+                  Edit
+                </a>
+                <button
+                  class="delete-btn"
+                  data-slug={p.slug}
+                  style="font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; color: #b5421a; background: none; border: none; cursor: pointer; padding: 0;"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </main>
+
+    <script>
+      document.querySelectorAll<HTMLButtonElement>(".delete-btn").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          const slug = btn.dataset.slug!;
+          if (!confirm(`Delete "${slug}"?`)) return;
+          const res = await fetch(`/api/posts/${slug}`, { method: "DELETE" });
+          if (res.ok) {
+            const row = document.querySelector<HTMLElement>(`.post-row[data-slug="${slug}"]`);
+            row?.remove();
+          } else {
+            alert("Failed to delete post.");
+          }
+        });
+      });
+    </script>
+
+  </body>
+</html>

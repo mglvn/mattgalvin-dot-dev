@@ -1,0 +1,349 @@
+---
+interface Props {
+  value: string;
+}
+const { value } = Astro.props;
+---
+
+<div class="md-editor">
+
+  <!-- Toolbar -->
+  <div class="md-toolbar">
+    <!-- Mode toggle -->
+    <button type="button" class="md-tab md-tab--active" id="tab-write">Write</button>
+    <button type="button" class="md-tab" id="tab-preview">Preview</button>
+
+    <div class="md-divider"></div>
+
+    <!-- Format buttons (hidden in preview mode) -->
+    <div id="md-format-btns" style="display: flex; align-items: center; gap: 0.25rem; flex-wrap: wrap;">
+      <button type="button" class="md-btn" data-action="h2" title="Heading 2">H2</button>
+      <button type="button" class="md-btn" data-action="h3" title="Heading 3">H3</button>
+      <div class="md-divider"></div>
+      <button type="button" class="md-btn md-btn--icon" data-action="bold" title="Bold">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 2h4a2 2 0 010 4H3V2zM3 6h4.5a2.5 2.5 0 010 5H3V6z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round" fill="none"/></svg>
+      </button>
+      <button type="button" class="md-btn md-btn--icon" data-action="italic" title="Italic">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><line x1="7" y1="2" x2="5" y2="10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><line x1="4" y1="2" x2="8" y2="2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><line x1="3" y1="10" x2="7" y2="10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+      </button>
+      <div class="md-divider"></div>
+      <button type="button" class="md-btn" data-action="code" title="Inline code">`code`</button>
+      <button type="button" class="md-btn" data-action="codeblock" title="Code block">```</button>
+      <div class="md-divider"></div>
+      <button type="button" class="md-btn" data-action="link" title="Link">link</button>
+      <button type="button" class="md-btn" data-action="ul" title="Bullet list">— list</button>
+      <button type="button" class="md-btn" data-action="ol" title="Numbered list">1. list</button>
+      <button type="button" class="md-btn" data-action="blockquote" title="Blockquote">"</button>
+      <button type="button" class="md-btn" data-action="hr" title="Horizontal rule">—</button>
+      <div class="md-divider"></div>
+      <button type="button" class="md-btn" id="md-upload-btn" title="Upload image">image</button>
+      <input type="file" id="md-upload-input" accept="image/*" style="display: none;" />
+    </div>
+  </div>
+
+  <!-- Write pane -->
+  <textarea
+    id="body"
+    name="body"
+    class="md-textarea"
+    spellcheck="false"
+    autocomplete="off"
+  >{value}</textarea>
+
+  <!-- Preview pane -->
+  <div id="md-preview" class="md-preview prose is-empty"></div>
+
+</div>
+
+<style>
+  .md-editor {
+    border: 1px solid #ccc5b8;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Toolbar */
+  .md-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.4rem 0.75rem;
+    border-bottom: 1px solid #ccc5b8;
+    background: #ede8de;
+    flex-wrap: wrap;
+  }
+
+  .md-tab {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #8a8076;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.3rem 0.6rem;
+    transition: color 0.15s;
+    line-height: 1;
+  }
+
+  .md-tab--active {
+    color: #1a1612;
+    border-bottom: 1px solid #1a1612;
+  }
+
+  .md-btn {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.06em;
+    color: #8a8076;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.3rem 0.5rem;
+    transition: color 0.15s, background 0.15s;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .md-btn:hover {
+    color: #1a1612;
+    background: #ccc5b8;
+  }
+
+  .md-btn--icon {
+    padding: 0.35rem 0.4rem;
+  }
+
+  .md-divider {
+    width: 1px;
+    height: 14px;
+    background: #ccc5b8;
+    margin: 0 0.2rem;
+    flex-shrink: 0;
+  }
+
+  /* Textarea */
+  .md-textarea {
+    display: block;
+    resize: vertical;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    line-height: 1.7;
+    color: #1a1612;
+    padding: 1rem 1.25rem;
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 420px;
+  }
+
+  /* Preview */
+  .md-preview {
+    display: none;
+    padding: 1.25rem 1.5rem;
+    box-sizing: border-box;
+    min-height: 420px;
+  }
+
+  .md-preview.is-active {
+    display: block;
+  }
+
+  /* Prose styles scoped to preview */
+  .prose {
+    font-size: 0.9rem;
+    line-height: 1.8;
+    color: #3d3830;
+    font-weight: 300;
+    font-family: 'DM Sans', system-ui, sans-serif;
+  }
+  .prose :global(h1), .prose :global(h2), .prose :global(h3), .prose :global(h4) {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: #1a1612;
+    margin-top: 2rem;
+    margin-bottom: 0.6rem;
+    line-height: 1.2;
+  }
+  .prose :global(h2) { font-size: 1.5rem; }
+  .prose :global(h3) { font-size: 1.2rem; }
+  .prose :global(p) { margin-bottom: 1.25rem; }
+  .prose :global(a) { color: #b5421a; text-decoration: underline; text-underline-offset: 3px; }
+  .prose :global(code) {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.78em;
+    background: #e8e3d8;
+    padding: 0.1em 0.35em;
+  }
+  .prose :global(pre) {
+    background: #1a1612;
+    color: #e8e3d8;
+    padding: 1.25rem;
+    overflow-x: auto;
+    margin-bottom: 1.25rem;
+  }
+  .prose :global(pre code) {
+    background: none;
+    padding: 0;
+    font-size: 0.8rem;
+    color: inherit;
+  }
+  .prose :global(blockquote) {
+    border-left: 2px solid #b5421a;
+    padding-left: 1.25rem;
+    margin-left: 0;
+    color: #6a6460;
+    font-style: italic;
+  }
+  .prose :global(ul), .prose :global(ol) {
+    padding-left: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+  .prose :global(li) { margin-bottom: 0.35rem; }
+  .prose :global(hr) {
+    border: none;
+    border-top: 1px solid #ccc5b8;
+    margin: 2.5rem 0;
+  }
+  .prose :global(img) { max-width: 100%; height: auto; }
+  .prose :global(strong) { font-weight: 500; color: #1a1612; }
+  .prose :global(em) { font-style: italic; }
+
+  .md-preview.is-empty::before {
+    content: 'Nothing to preview yet.';
+    color: #ccc5b8;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+  }
+</style>
+
+<script>
+  import { marked } from 'marked';
+
+  const textarea = document.getElementById('body') as HTMLTextAreaElement;
+  const preview = document.getElementById('md-preview') as HTMLDivElement;
+  const tabWrite = document.getElementById('tab-write') as HTMLButtonElement;
+  const tabPreview = document.getElementById('tab-preview') as HTMLButtonElement;
+  const formatBtns = document.getElementById('md-format-btns') as HTMLDivElement;
+
+  async function updatePreview() {
+    const html = await marked(textarea.value);
+    preview.innerHTML = html;
+    preview.classList.toggle('is-empty', !textarea.value.trim());
+  }
+
+  // Tab toggle
+  tabWrite.addEventListener('click', () => {
+    tabWrite.classList.add('md-tab--active');
+    tabPreview.classList.remove('md-tab--active');
+    textarea.style.display = 'block';
+    preview.classList.remove('is-active');
+    formatBtns.style.display = 'flex';
+    textarea.focus();
+  });
+
+  tabPreview.addEventListener('click', async () => {
+    tabPreview.classList.add('md-tab--active');
+    tabWrite.classList.remove('md-tab--active');
+    textarea.style.display = 'none';
+    preview.classList.add('is-active');
+    formatBtns.style.display = 'none';
+    await updatePreview();
+  });
+
+  // Tab key → 2 spaces
+  textarea.addEventListener('keydown', (e: KeyboardEvent) => {
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      textarea.value = textarea.value.slice(0, start) + '  ' + textarea.value.slice(end);
+      textarea.selectionStart = textarea.selectionEnd = start + 2;
+    }
+  });
+
+  // Toolbar actions
+  function wrap(before: string, after: string, placeholder: string) {
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selected = textarea.value.slice(start, end) || placeholder;
+    textarea.value = textarea.value.slice(0, start) + before + selected + after + textarea.value.slice(end);
+    textarea.selectionStart = start + before.length;
+    textarea.selectionEnd = start + before.length + selected.length;
+    textarea.focus();
+  }
+
+  function insertLine(prefix: string, placeholder: string) {
+    const start = textarea.selectionStart;
+    const val = textarea.value;
+    const lineStart = val.lastIndexOf('\n', start - 1) + 1;
+    const lineEnd = val.indexOf('\n', start);
+    const line = val.slice(lineStart, lineEnd === -1 ? undefined : lineEnd);
+    const newLine = prefix + (line || placeholder);
+    textarea.value = val.slice(0, lineStart) + newLine + (lineEnd === -1 ? '' : val.slice(lineEnd));
+    textarea.selectionStart = textarea.selectionEnd = lineStart + newLine.length;
+    textarea.focus();
+  }
+
+  // Image upload
+  const uploadBtn = document.getElementById('md-upload-btn') as HTMLButtonElement;
+  const uploadInput = document.getElementById('md-upload-input') as HTMLInputElement;
+
+  uploadBtn.addEventListener('click', () => uploadInput.click());
+
+  uploadInput.addEventListener('change', async () => {
+    const file = uploadInput.files?.[0];
+    if (!file) return;
+
+    uploadBtn.textContent = 'uploading…';
+    uploadBtn.disabled = true;
+
+    try {
+      const fd = new FormData();
+      fd.append('file', file);
+      const res = await fetch('/api/uploads', { method: 'POST', body: fd });
+      if (!res.ok) throw new Error('Upload failed');
+      const { url } = await res.json() as { url: string };
+      const alt = file.name.replace(/\.[^.]+$/, '');
+      wrap(`![${alt}](`, ')', url);
+    } catch {
+      alert('Image upload failed.');
+    } finally {
+      uploadBtn.textContent = 'image';
+      uploadBtn.disabled = false;
+      uploadInput.value = '';
+    }
+  });
+
+  document.querySelectorAll<HTMLButtonElement>('.md-btn[data-action]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      switch (btn.dataset.action) {
+        case 'h2':         insertLine('## ', 'Heading'); break;
+        case 'h3':         insertLine('### ', 'Heading'); break;
+        case 'bold':       wrap('**', '**', 'bold text'); break;
+        case 'italic':     wrap('_', '_', 'italic text'); break;
+        case 'code':       wrap('`', '`', 'code'); break;
+        case 'codeblock':  wrap('```\n', '\n```', 'code here'); break;
+        case 'link':       wrap('[', '](url)', 'link text'); break;
+        case 'ul':         insertLine('- ', 'List item'); break;
+        case 'ol':         insertLine('1. ', 'List item'); break;
+        case 'blockquote': insertLine('> ', 'Quote'); break;
+        case 'hr': {
+          const pos = textarea.selectionStart;
+          const nl = textarea.value[pos - 1] === '\n' ? '' : '\n';
+          textarea.value = textarea.value.slice(0, pos) + nl + '\n---\n\n' + textarea.value.slice(pos);
+          textarea.selectionStart = textarea.selectionEnd = pos + nl.length + 6;
+          textarea.focus();
+          break;
+        }
+      }
+    });
+  });
+</script>

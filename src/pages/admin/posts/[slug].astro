@@ -1,0 +1,204 @@
+---
+import { getPost, parseTags } from "../../../lib/db";
+import MarkdownEditor from "../../../components/MarkdownEditor.astro";
+
+const { slug } = Astro.params;
+const db = Astro.locals.runtime.env.DB;
+const post = await getPost(db, slug!);
+
+if (!post) {
+  return Astro.redirect("/admin");
+}
+
+const tags = parseTags(post.tags).join(", ");
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{post.title} — Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&family=Space+Mono&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body style="background: #f2ede3; margin: 0; min-height: 100svh; font-family: 'DM Sans', system-ui, sans-serif;">
+
+    <!-- Top bar -->
+    <header style="position: sticky; top: 0; z-index: 10; background: #f2ede3; border-bottom: 1px solid #ccc5b8; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center;">
+      <div style="display: flex; align-items: center; gap: 2rem;">
+        <a href="/admin" style="font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: #8a8076; text-decoration: none;">
+          ← Posts
+        </a>
+        <span style="color: #ccc5b8;">|</span>
+        <span style="font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase; color: #1a1612; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+          {post.title}
+        </span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 1.5rem;">
+        {post.published && (
+          <a
+            href={`/blog/${post.slug}`}
+            target="_blank"
+            style="font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; color: #8a8076; text-decoration: none;"
+          >
+            View live ↗
+          </a>
+        )}
+        <form method="POST" action="/api/auth/logout">
+          <button type="submit" style="font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; color: #8a8076; background: none; border: none; cursor: pointer; padding: 0;">
+            Sign out
+          </button>
+        </form>
+      </div>
+    </header>
+
+    <main style="max-width: 860px; margin: 0 auto; padding: 3rem 2rem 6rem;">
+
+      <p id="status" style="font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 0.06em; min-height: 1.2em; color: #8a8076; margin-bottom: 1.5rem;"></p>
+
+      <form id="post-form" style="display: flex; flex-direction: column; gap: 1.75rem;">
+
+        <!-- Title + slug -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
+          <div>
+            <label class="field-label">Title</label>
+            <input id="title" name="title" type="text" required class="field-input" value={post.title} />
+          </div>
+          <div>
+            <label class="field-label">Slug</label>
+            <input id="slug-display" type="text" class="field-input" value={post.slug} disabled
+              style="font-family: 'Space Mono', monospace; font-size: 0.8rem; opacity: 0.5; cursor: not-allowed;" />
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div>
+          <label class="field-label">Description</label>
+          <textarea id="description" name="description" rows="2" class="field-input" style="resize: vertical;">{post.description}</textarea>
+        </div>
+
+        <!-- Body -->
+        <div>
+          <label class="field-label">Body (Markdown)</label>
+          <MarkdownEditor value={post.body} />
+        </div>
+
+        <!-- Meta row -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 1.25rem; align-items: end;">
+          <div>
+            <label class="field-label">Tags (comma separated)</label>
+            <input id="tags" name="tags" type="text" class="field-input" value={tags} placeholder="Go, TypeScript" />
+          </div>
+          <div>
+            <label class="field-label">Type</label>
+            <select id="type" name="type" class="field-input">
+              <option value="blog" selected={post.type === "blog"}>Blog</option>
+              <option value="projects" selected={post.type === "projects"}>Projects</option>
+            </select>
+          </div>
+          <div>
+            <label class="field-label">Status</label>
+            <select id="status-select" name="status" class="field-input">
+              <option value="active" selected={post.status === "active"}>Active</option>
+              <option value="wip" selected={post.status === "wip"}>WIP</option>
+              <option value="archived" selected={post.status === "archived"}>Archived</option>
+            </select>
+          </div>
+          <div>
+            <label class="field-label">Date</label>
+            <input id="date" name="date" type="date" required class="field-input" value={post.date} />
+          </div>
+        </div>
+
+        <!-- Published + submit -->
+        <div style="display: flex; align-items: center; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #ccc5b8;">
+          <label style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer; font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase; color: #8a8076;">
+            <input id="published" name="published" type="checkbox" checked={post.published === 1}
+              style="width: 14px; height: 14px; accent-color: #1a1612;" />
+            Published
+          </label>
+          <button
+            type="submit"
+            style="font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: #f2ede3; background: #1a1612; border: none; cursor: pointer; padding: 0.7rem 1.5rem;"
+          >
+            Save changes
+          </button>
+        </div>
+
+      </form>
+    </main>
+
+    <style>
+      .field-label {
+        display: block;
+        font-family: 'Space Mono', monospace;
+        font-size: 0.6rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: #8a8076;
+        margin-bottom: 0.4rem;
+      }
+      .field-input {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0.65rem 0.85rem;
+        background: transparent;
+        border: 1px solid #ccc5b8;
+        font-family: 'DM Sans', system-ui, sans-serif;
+        font-size: 0.9rem;
+        font-weight: 300;
+        color: #1a1612;
+        outline: none;
+        appearance: none;
+      }
+      .field-input:focus { border-color: #8a8076; }
+    </style>
+
+    <script define:vars={{ slug: post.slug }}>
+      const form = document.getElementById("post-form");
+      const statusEl = document.getElementById("status");
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        statusEl.textContent = "Saving…";
+        statusEl.style.color = "#8a8076";
+
+        const tagsRaw = document.getElementById("tags").value;
+        const tags = tagsRaw.split(",").map((t) => t.trim()).filter(Boolean);
+
+        const body = {
+          title:       document.getElementById("title").value,
+          description: document.getElementById("description").value,
+          body:        document.getElementById("body").value,
+          tags:        JSON.stringify(tags),
+          type:        document.getElementById("type").value,
+          status:      document.getElementById("status-select").value,
+          published:   document.getElementById("published").checked,
+          date:        document.getElementById("date").value,
+        };
+
+        const res = await fetch(`/api/posts/${slug}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+
+        if (res.ok) {
+          statusEl.textContent = "Saved.";
+          statusEl.style.color = "#6a8a6a";
+          setTimeout(() => { statusEl.textContent = ""; }, 2000);
+        } else {
+          const err = await res.json();
+          statusEl.textContent = err.error ?? "Failed to save.";
+          statusEl.style.color = "#b5421a";
+        }
+      });
+    </script>
+
+  </body>
+</html>

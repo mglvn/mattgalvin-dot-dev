@@ -1,53 +1,11 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { listPosts, formatDate, parseTags } from "../lib/db";
 
-const projects = [
-  {
-    num: "01",
-    year: "2025",
-    title: "Project Alpha",
-    description: "A brief description of what this project is, why it matters, and what problem it solves for the people who use it.",
-    tags: ["React", "TypeScript", "Node"],
-    href: "#",
-  },
-  {
-    num: "02",
-    year: "2025",
-    title: "Project Beta",
-    description: "Another project that showcases a different side of your craft — design-led, thoughtful, and built to last.",
-    tags: ["Astro", "Tailwind", "Cloudflare"],
-    href: "#",
-  },
-  {
-    num: "03",
-    year: "2024",
-    title: "Project Gamma",
-    description: "A challenging problem with an elegant solution. Sometimes the best engineering is the kind you never notice.",
-    tags: ["Go", "PostgreSQL", "Docker"],
-    href: "#",
-  },
-];
+const db = Astro.locals.runtime.env.DB;
+const recentPosts = await listPosts(db, "blog", true).then((p) => p.slice(0, 3)).catch(() => []);
+const projects = await listPosts(db, "projects", true).then((p) => p.slice(0, 3)).catch(() => []);
 
-const posts = [
-  {
-    date: "Apr 2026",
-    slug: "#",
-    title: "The Art of Saying No to Features",
-    excerpt: "How constraint breeds creativity in software design.",
-  },
-  {
-    date: "Mar 2026",
-    slug: "#",
-    title: "Building With the Grain",
-    excerpt: "Why fighting your tools is usually the wrong move.",
-  },
-  {
-    date: "Feb 2026",
-    slug: "#",
-    title: "On Shipping Imperfect Things",
-    excerpt: "Done is better than perfect, but not as simple as it sounds.",
-  },
-];
 ---
 
 <Layout title="Home">
@@ -117,25 +75,29 @@ const posts = [
       </a>
     </div>
 
-    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5px; background: #ccc5b8;">
-      {projects.map((p) => (
-        <a href={p.href} class="work-card" style="background: #f2ede3; padding: 2.5rem; display: flex; flex-direction: column; gap: 1.25rem; text-decoration: none; color: inherit;">
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <span style="font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; color: #ccc5b8;">{p.num}</span>
-            <span style="font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.08em; color: #b5421a; display: flex; align-items: center; gap: 0.3em;">{p.year} ↗</span>
-          </div>
-          <div>
-            <h3 class="font-display" style="font-size: 1.75rem; font-weight: 500; letter-spacing: -0.01em; line-height: 1.1; margin-bottom: 0.75rem;">{p.title}</h3>
-            <p style="font-size: 0.9rem; line-height: 1.65; color: #6a6460; font-weight: 300;">{p.description}</p>
-          </div>
-          <div style="display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: auto;">
-            {p.tags.map((t) => (
-              <span style="font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.25rem 0.6rem; border: 1px solid #ccc5b8; color: #8a8076;">{t}</span>
-            ))}
-          </div>
-        </a>
-      ))}
-    </div>
+    {projects.length === 0 ? (
+      <p style="font-size: 0.875rem; color: #8a8076; font-weight: 300;">No projects yet.</p>
+    ) : (
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5px; background: #ccc5b8;">
+        {projects.map((p, i) => (
+          <a href={`/work/${p.slug}`} class="work-card" style="background: #f2ede3; padding: 2.5rem; display: flex; flex-direction: column; gap: 1.25rem; text-decoration: none; color: inherit;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; color: #ccc5b8;">{String(i + 1).padStart(2, "0")}</span>
+              <span style="font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.08em; color: #b5421a; display: flex; align-items: center; gap: 0.3em;">{p.date.slice(0, 4)} ↗</span>
+            </div>
+            <div>
+              <h3 class="font-display" style="font-size: 1.75rem; font-weight: 500; letter-spacing: -0.01em; line-height: 1.1; margin-bottom: 0.75rem;">{p.title}</h3>
+              <p style="font-size: 0.9rem; line-height: 1.65; color: #6a6460; font-weight: 300;">{p.description}</p>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: auto;">
+              {parseTags(p.tags).map((t) => (
+                <span style="font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.25rem 0.6rem; border: 1px solid #ccc5b8; color: #8a8076;">{t}</span>
+              ))}
+            </div>
+          </a>
+        ))}
+      </div>
+    )}
   </section>
 
   <!-- WRITING -->
@@ -155,14 +117,18 @@ const posts = [
     </div>
 
     <div style="border-top: 1px solid #ccc5b8;">
-      {posts.map((p) => (
-        <a href={p.slug} class="blog-row" style="display: grid; grid-template-columns: 7rem 1fr; gap: 2rem; align-items: baseline; padding: 1.75rem 1rem; border-bottom: 1px solid #ccc5b8; text-decoration: none; color: inherit;">
-          <span style="font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.08em; color: #8a8076; padding-top: 0.2rem;">{p.date}</span>
+      {recentPosts.length === 0 ? (
+        <p style="padding: 2rem 1rem; font-size: 0.875rem; color: #8a8076; font-weight: 300;">No posts yet.</p>
+      ) : recentPosts.map((p) => (
+        <a href={`/blog/${p.slug}`} class="blog-row" style="display: grid; grid-template-columns: 7rem 1fr; gap: 2rem; align-items: baseline; padding: 1.75rem 1rem; border-bottom: 1px solid #ccc5b8; text-decoration: none; color: inherit;">
+          <span style="font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.08em; color: #8a8076; padding-top: 0.2rem;">{formatDate(p.date)}</span>
           <div>
             <h3 class="font-display" style="font-size: 1.4rem; font-weight: 500; letter-spacing: -0.01em; margin-bottom: 0.3rem; transition: color 0.2s;">
               {p.title}
             </h3>
-            <p style="font-size: 0.875rem; color: #8a8076; font-weight: 300;">{p.excerpt}</p>
+            {p.description && (
+              <p style="font-size: 0.875rem; color: #8a8076; font-weight: 300;">{p.description}</p>
+            )}
           </div>
         </a>
       ))}

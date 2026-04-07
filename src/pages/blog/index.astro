@@ -1,43 +1,9 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import { listPosts, formatDate } from "../../lib/db";
 
-const posts = [
-  {
-    date: "Apr 2026",
-    slug: "#",
-    title: "The Art of Saying No to Features",
-    excerpt: "How constraint breeds creativity in software design. When every idea becomes a feature, nothing feels like a choice.",
-    readTime: "5 min",
-  },
-  {
-    date: "Mar 2026",
-    slug: "#",
-    title: "Building With the Grain",
-    excerpt: "Why fighting your tools is usually the wrong move. The best software feels like it was always there.",
-    readTime: "4 min",
-  },
-  {
-    date: "Feb 2026",
-    slug: "#",
-    title: "On Shipping Imperfect Things",
-    excerpt: "Done is better than perfect, but not as simple as it sounds. Some thoughts on the courage it takes to ship.",
-    readTime: "6 min",
-  },
-  {
-    date: "Jan 2026",
-    slug: "#",
-    title: "The Case for Boring Technology",
-    excerpt: "Choosing proven tools over exciting ones isn't a lack of ambition — it's a form of respect for the problem.",
-    readTime: "7 min",
-  },
-  {
-    date: "Dec 2025",
-    slug: "#",
-    title: "Writing Code for the Next Person",
-    excerpt: "That next person is probably you, six months from now, at 2am with no context. Be kind to them.",
-    readTime: "4 min",
-  },
-];
+const db = Astro.locals.runtime.env.DB;
+const posts = await listPosts(db, "blog", true);
 ---
 
 <Layout title="Blog" description="Writing by Matt Galvin on design, engineering, and the craft of building.">
@@ -52,14 +18,17 @@ const posts = [
     </div>
 
     <div class="anim-2" style="border-top: 1px solid #ccc5b8;">
-      {posts.map((p) => (
-        <a href={p.slug} class="blog-row" style="display: grid; grid-template-columns: 7rem 1fr auto; gap: 2rem; align-items: baseline; padding: 2rem 1rem; border-bottom: 1px solid #ccc5b8; text-decoration: none; color: inherit;">
-          <span style="font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.08em; color: #8a8076;">{p.date}</span>
+      {posts.length === 0 ? (
+        <p style="padding: 3rem 1rem; font-size: 0.875rem; color: #8a8076; font-weight: 300;">No posts yet.</p>
+      ) : posts.map((p) => (
+        <a href={`/blog/${p.slug}`} class="blog-row" style="display: grid; grid-template-columns: 7rem 1fr; gap: 2rem; align-items: baseline; padding: 2rem 1rem; border-bottom: 1px solid #ccc5b8; text-decoration: none; color: inherit;">
+          <span style="font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.08em; color: #8a8076;">{formatDate(p.date)}</span>
           <div>
             <h2 class="font-display" style="font-size: 1.5rem; font-weight: 500; letter-spacing: -0.01em; margin-bottom: 0.4rem;">{p.title}</h2>
-            <p style="font-size: 0.875rem; color: #8a8076; font-weight: 300; line-height: 1.6;">{p.excerpt}</p>
+            {p.description && (
+              <p style="font-size: 0.875rem; color: #8a8076; font-weight: 300; line-height: 1.6;">{p.description}</p>
+            )}
           </div>
-          <span style="font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.08em; color: #ccc5b8; white-space: nowrap; align-self: center;">{p.readTime}</span>
         </a>
       ))}
     </div>

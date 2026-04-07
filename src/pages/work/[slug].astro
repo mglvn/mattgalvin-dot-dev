@@ -1,0 +1,121 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getPost, parseTags, formatDate } from "../../lib/db";
+import { marked } from "marked";
+
+const { slug } = Astro.params;
+const db = Astro.locals.runtime.env.DB;
+const post = await getPost(db, slug!);
+
+if (!post || !post.published || post.type !== "projects") {
+  return new Response(null, { status: 404 });
+}
+
+const tags = parseTags(post.tags);
+const html = await marked(post.body);
+---
+
+<Layout title={post.title} description={post.description}>
+  <article style="padding-top: 10rem; padding-bottom: 6rem; padding-left: 2.5rem; padding-right: 2.5rem; max-width: 780px; margin: 0 auto;">
+
+    <header class="anim-1" style="margin-bottom: 4rem;">
+      <div style="display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1.5rem;">
+        <a href="/work" style="font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: #8a8076; text-decoration: none;">
+          ← Work
+        </a>
+        <span style="font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.08em; color: #ccc5b8;">
+          {formatDate(post.date)}
+        </span>
+      </div>
+
+      <h1 class="font-display" style="font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 400; line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 1.5rem;">
+        {post.title}
+      </h1>
+
+      {post.description && (
+        <p style="font-size: 1.05rem; color: #6a6460; font-weight: 300; line-height: 1.65; max-width: 60ch; margin-bottom: 2rem;">
+          {post.description}
+        </p>
+      )}
+
+      {tags.length > 0 && (
+        <div style="display: flex; flex-wrap: wrap; gap: 0.4rem;">
+          {tags.map((t) => (
+            <span style="font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.25rem 0.6rem; border: 1px solid #ccc5b8; color: #8a8076;">
+              {t}
+            </span>
+          ))}
+        </div>
+      )}
+    </header>
+
+    <div class="anim-2" style="border-top: 1px solid #ccc5b8; padding-top: 3rem;">
+      <div class="prose" set:html={html} />
+    </div>
+
+  </article>
+</Layout>
+
+<style is:global>
+  .prose {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: #3d3830;
+    font-weight: 300;
+  }
+  .prose h1, .prose h2, .prose h3, .prose h4 {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: #1a1612;
+    margin-top: 2.5rem;
+    margin-bottom: 0.75rem;
+    line-height: 1.2;
+  }
+  .prose h2 { font-size: 1.75rem; }
+  .prose h3 { font-size: 1.35rem; }
+  .prose p { margin-bottom: 1.5rem; }
+  .prose a { color: #b5421a; text-decoration: underline; text-underline-offset: 3px; }
+  .prose a:hover { text-decoration: none; }
+  .prose code {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8em;
+    background: #e8e3d8;
+    padding: 0.15em 0.4em;
+    border-radius: 2px;
+  }
+  .prose pre {
+    background: #1a1612;
+    color: #e8e3d8;
+    padding: 1.5rem;
+    overflow-x: auto;
+    margin-bottom: 1.5rem;
+  }
+  .prose pre code {
+    background: none;
+    padding: 0;
+    font-size: 0.875rem;
+    color: inherit;
+  }
+  .prose blockquote {
+    border-left: 2px solid #b5421a;
+    padding-left: 1.5rem;
+    margin-left: 0;
+    color: #6a6460;
+    font-style: italic;
+  }
+  .prose ul, .prose ol {
+    padding-left: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .prose li { margin-bottom: 0.4rem; }
+  .prose hr {
+    border: none;
+    border-top: 1px solid #ccc5b8;
+    margin: 3rem 0;
+  }
+  .prose img {
+    max-width: 100%;
+    height: auto;
+  }
+</style>

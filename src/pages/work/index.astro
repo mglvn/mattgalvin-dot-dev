@@ -1,0 +1,44 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { listPosts, parseTags, formatDate } from "../../lib/db";
+
+const db = Astro.locals.runtime.env.DB;
+const projects = await listPosts(db, "projects", true);
+---
+
+<Layout title="Work" description="Selected projects by Matt Galvin.">
+  <div style="padding-top: 10rem; padding-bottom: 4rem; padding-left: 2.5rem; padding-right: 2.5rem; max-width: 1200px; margin: 0 auto;">
+
+    <div class="anim-1" style="margin-bottom: 5rem;">
+      <p style="font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: #8a8076; margin-bottom: 1rem;">Work</p>
+      <h1 class="font-display" style="font-size: clamp(3rem, 9vw, 9rem); font-weight: 300; line-height: 0.9; letter-spacing: -0.02em;">
+        Selected<br />
+        <em style="font-style: italic; color: #b5421a;">projects.</em>
+      </h1>
+    </div>
+
+    {projects.length === 0 ? (
+      <p style="font-size: 0.875rem; color: #8a8076; font-weight: 300;">No projects yet.</p>
+    ) : (
+      <div class="anim-2" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5px; background: #ccc5b8;">
+        {projects.map((p, i) => (
+          <a href={`/work/${p.slug}`} class="work-card" style="background: #f2ede3; padding: 2.5rem; display: flex; flex-direction: column; gap: 1.25rem; text-decoration: none; color: inherit;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; color: #ccc5b8;">{String(i + 1).padStart(2, "0")}</span>
+              <span style="font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.08em; color: #b5421a;">{p.date.slice(0, 4)} ↗</span>
+            </div>
+            <div>
+              <h2 class="font-display" style="font-size: 1.75rem; font-weight: 500; letter-spacing: -0.01em; line-height: 1.1; margin-bottom: 0.75rem;">{p.title}</h2>
+              <p style="font-size: 0.9rem; line-height: 1.65; color: #6a6460; font-weight: 300;">{p.description}</p>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: auto;">
+              {parseTags(p.tags).map((t) => (
+                <span style="font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.25rem 0.6rem; border: 1px solid #ccc5b8; color: #8a8076;">{t}</span>
+              ))}
+            </div>
+          </a>
+        ))}
+      </div>
+    )}
+  </div>
+</Layout>
