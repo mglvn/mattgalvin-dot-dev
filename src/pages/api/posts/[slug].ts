@@ -21,6 +21,7 @@ export const PUT: APIRoute = async ({ locals, params, request }) => {
     if (body.status      !== undefined) data.status      = body.status;
     if (body.published   !== undefined) data.published   = body.published ? 1 : 0;
     if (body.date        !== undefined) data.date        = String(body.date);
+    if (body.hero_image  !== undefined) data.hero_image  = String(body.hero_image);
 
     const post = await updatePost(db, params.slug!, data as Parameters<typeof updatePost>[2]);
     return Response.json(post);

@@ -2,160 +2,105 @@
 import Layout from "../layouts/Layout.astro";
 ---
 
-<Layout title="About" description="About Matt Galvin — designer and developer.">
-  <div style="padding-top: 10rem; padding-bottom: 4rem; padding-left: 2.5rem; padding-right: 2.5rem; max-width: 1200px; margin: 0 auto;">
+<Layout title="About" description="About Matt Galvin.">
+  <div style="padding-top: 10rem; padding-bottom: 6rem; padding-left: 2.5rem; padding-right: 2.5rem; max-width: 1200px; margin: 0 auto;">
 
     <!-- Header -->
     <div class="anim-1" style="margin-bottom: 5rem;">
-      <p style="font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: #8a8076; margin-bottom: 1rem;">About</p>
-      <h1 class="font-display" style="font-size: clamp(3rem, 9vw, 9rem); font-weight: 300; line-height: 0.9; letter-spacing: -0.02em;">
-        Nice to<br />
-        <em style="font-style: italic; color: #b5421a;">meet you.</em>
+<h1 class="font-display" style="font-size: clamp(3rem, 9vw, 9rem); font-weight: 300; line-height: 0.9; letter-spacing: -0.02em;">
+        <em style="font-style: italic; color: #b5421a;">About.</em>
       </h1>
     </div>
-<div class="anim-2" style="display: flex; flex-direction: column; gap: 6rem; border-top: 1px solid #ccc5b8; padding-top: 4rem;">
 
-  <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 6rem; align-items: start;">
-    
-    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
-      <p class="font-display" style="font-size: 1.4rem; line-height: 1.3; color: #1a1612;">
-        I taught Cast Members how to create the best experiences in the world.
-      </p>
-      <p style="font-size: 0.95rem; line-height: 1.75; font-weight: 300; color: #3d3830;">
-        I taught Cast Members at <strong>The Walt Disney Company</strong> how to create the best experiences in the world. From those parks to the consumer frontline of <strong>Vodafone</strong>, I’ve spent my career bridging the gap between our clients and our technical execution. Currently, I lead that mission at <strong>Luxury Presence</strong>.
-      </p>
-    </div>
+    <div class="anim-2" style="display: flex; flex-direction: column; gap: 0; border-top: 1px solid #ccc5b8;">
 
-    <div style="display: flex; flex-direction: column; gap: 1.5rem; padding-top: 0.4rem;">
-      <p style="font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: #8a8076;">Professional History</p>
-      <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 1rem;">
-        {[
-          { name: "Luxury Presence", role: "Manager, Client Support" },
-          { name: "ecobee", role: "Senior Support Specialist" },
-          { name: "The Walt Disney Company", role: "Trainer, Cast Member" },
-          { name: "Vodafone", role: "Customer Operations" }
-        ].map((job) => (
-          <li style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid #f0eee9; padding-bottom: 0.5rem;">
-            <span style="font-weight: 500; font-size: 0.9rem; color: #1a1612;">{job.name}</span>
-            <span style="font-family: 'Space Mono', monospace; font-size: 0.6rem; color: #8a8076; text-transform: uppercase;">{job.role}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
-  </div>
-
-  <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 6rem; align-items: start;">
-    
-    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
-      <p class="font-display" style="font-size: 1.4rem; line-height: 1.3; color: #1a1612;">
-        Architecting a transition into Product.
-      </p>
-      <p style="font-size: 0.95rem; line-height: 1.75; font-weight: 300; color: #3d3830;">
-        My current focus is a rigorous period of professional development to bridge the gap between leadership and product strategy. I’m combining formal certifications with hands-on tinkering to master the space where user needs meet technical architecture.
-      </p>
-    </div>
-
-    <div style="display: flex; flex-direction: column; gap: 1.5rem; padding-top: 0.4rem;">
-      <p style="font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: #8a8076;">Active Arsenal</p>
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
-        <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.75rem;">
-           <li style="font-family: 'Space Mono', monospace; font-size: 0.6rem; color: #b5421a; margin-bottom: 0.25rem;">[ IN PROGRESS ]</li>
-           <li style="font-size: 0.85rem; color: #1a1612; border-left: 1px solid #f0eee9; padding-left: 0.75rem;">Google PM Pro</li>
-           <li style="font-size: 0.85rem; color: #1a1612; border-left: 1px solid #f0eee9; padding-left: 0.75rem;">Scrum.org PSPO I</li>
-        </ul>
-        <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.75rem;">
-           <li style="font-family: 'Space Mono', monospace; font-size: 0.6rem; color: #8a8076; margin-bottom: 0.25rem;">[ VALIDATED ]</li>
-           <li style="font-size: 0.85rem; color: #1a1612; border-left: 1px solid #f0eee9; padding-left: 0.75rem;">AWS AI Practitioner</li>
-           <li style="font-size: 0.85rem; color: #1a1612; border-left: 1px solid #f0eee9; padding-left: 0.75rem;">Google People Mgmt</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
-</div>
-    <!-- Two-column content -->
-    <div class="anim-2" style="display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: start; border-top: 1px solid #ccc5b8; padding-top: 4rem;">
-
-      <!-- Left: photo placeholder -->
-      <div>
-        <div style="aspect-ratio: 3/4; background: #e6e0d4; display: flex; align-items: end; justify-content: start; padding: 1.5rem; position: relative; overflow: hidden;">
-          <!-- Decorative texture -->
-          <div style="position: absolute; inset: 0; background: repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(0,0,0,0.015) 2px, rgba(0,0,0,0.015) 4px);"></div>
-          <span style="font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: #8a8076; position: relative; z-index: 1;">Photo coming soon</span>
-        </div>
-      </div>
-
-      <!-- Right: bio -->
-      <div style="display: flex; flex-direction: column; gap: 2rem; padding-top: 1rem;">
-        
-        <p class="font-display" style="font-size: 1.6rem; font-weight: 400; line-height: 1.5; letter-spacing: -0.01em; color: #1a1612;">
-          I'm Matt — a designer and developer who cares deeply about craft, clarity, and the space between the two.
-        </p>
-
-        <div style="display: flex; flex-direction: column; gap: 1.25rem; font-size: 0.95rem; line-height: 1.75; font-weight: 300; color: #3d3830;">
-          <p>
-          I’ve spent my career navigating complex digital ecosystems at scale. Currently, I lead Advanced Support at Luxury Presence, bridging the gap between high-value real estate clients and our product teams. Before that, I spent time at The Walt Disney Company teaching new Cast Members how to create the best experiences in the world, and at ecobee, where I dove deep into the intersection of IoT and smart home energy. My foundation was built in the fast-paced consumer operations world at Vodafone.
-          </p>
-          <p>
-            Right now I'm focused on [what you're focused on]. Previously I worked at [past companies or projects]. Before that, [whatever came before].
-          </p>
-          <div style="border-top: 1px solid #ccc5b8; padding-top: 2.5rem; margin-top: 2rem;">
-  <p style="font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: #8a8076; margin-bottom: 1.5rem;">
-    Professional Development & Certifications
-  </p>
-  
-  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
-    <div style="display: flex; flex-direction: column; gap: 1rem;">
-      <p style="font-family: 'Space Mono', monospace; font-size: 0.55rem; color: #b5421a; text-transform: uppercase;">In Progress</p>
-      <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem;">
-        <li style="font-size: 0.9rem; color: #1a1612; border-left: 2px solid #f0eee9; padding-left: 1rem;">
-          Google Project Management Professional
-        </li>
-        <li style="font-size: 0.9rem; color: #1a1612; border-left: 2px solid #f0eee9; padding-left: 1rem;">
-          PSPO I — Scrum.org
-        </li>
-      </ul>
-    </div>
-
-    <div style="display: flex; flex-direction: column; gap: 1rem;">
-      <p style="font-family: 'Space Mono', monospace; font-size: 0.55rem; color: #8a8076; text-transform: uppercase;">Validated</p>
-      <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem;">
-        <li style="font-size: 0.9rem; color: #1a1612; border-left: 2px solid #f0eee9; padding-left: 1rem;">
-          AWS Certified AI Practitioner
-        </li>
-        <li style="font-size: 0.9rem; color: #1a1612; border-left: 2px solid #f0eee9; padding-left: 1rem;">
-          Google People Management
-        </li>
-      </ul>
-    </div>
-  </div>
-</div>
-          <p>
-            Outside of work, you'll find me [hobbies, interests, things that make you a human].
-          </p>
-        </div>
-
-        <!-- Skills/stack -->
-        <div style="padding-top: 1.5rem; border-top: 1px solid #ccc5b8;">
-          <p style="font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: #8a8076; margin-bottom: 1rem;">Currently working with</p>
-          <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-            {["TypeScript", "React", "Astro", "Go", "Postgres", "Tailwind", "Cloudflare"].map((s) => (
-              <span style="font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.3rem 0.7rem; border: 1px solid #ccc5b8; color: #8a8076;">{s}</span>
-            ))}
+      <!-- Row 1: Photo | Bio -->
+      <div class="two-col">
+        <!-- Photo -->
+        <div style="background: #f2ede3; padding: 3rem 0;">
+          <div style="aspect-ratio: 3/4; overflow: hidden;">
+            <img src="/media/headshot.png" alt="Matt Galvin" style="width: 100%; height: 100%; object-fit: cover; display: block;" />
           </div>
         </div>
 
-        <!-- Links -->
-        <div style="display: flex; flex-direction: column; gap: 0.75rem; padding-top: 0.5rem;">
-          <a href="https://github.com/mglvn" class="link-arrow" target="_blank" rel="noopener">
-            GitHub ↗
-          </a>
-          <a href="mailto:hello@mattgalvin.dev" class="link-arrow">
-            hello@mattgalvin.dev →
-          </a>
+        <!-- Bio -->
+        <div style="background: #f2ede3; padding: 3rem;">
+          <div style="display: flex; flex-direction: column; gap: 1.25rem; font-size: 0.95rem; line-height: 1.8; font-weight: 300; color: #3d3830;">
+            <p>
+              I've spent my career navigating complex digital ecosystems at scale. Currently, I lead a team of product experts at <strong style="font-weight: 500; color: #1a1612;">Luxury Presence</strong>, bridging the gap between high-value real estate clients and our product teams.
+            </p>
+            <p>
+              Before that, I spent time at <strong style="font-weight: 500; color: #1a1612;">The Walt Disney Company</strong> teaching new Cast Members how to create the best experiences in the world, and at <strong style="font-weight: 500; color: #1a1612;">ecobee</strong>, where I dove deep into the intersection of IoT and smart home energy. My foundation was built in the fast-paced consumer operations world at <strong style="font-weight: 500; color: #1a1612;">Vodafone</strong>.
+            </p>
+            <p>
+              My current focus is a rigorous period of professional development to bridge the gap between leadership and product strategy — combining formal certifications with hands-on tinkering to master the space where user needs meet technical architecture.
+            </p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 2.5rem;">
+            <a href="https://github.com/mglvn" class="link-arrow" target="_blank" rel="noopener">GitHub ↗</a>
+            <a href="mailto:hello@mattgalvin.dev" class="link-arrow">hello@mattgalvin.dev →</a>
+          </div>
         </div>
+      </div>
+
+      <!-- Row 2: Experience | Certs -->
+      <div class="two-col">
+
+        <!-- Experience -->
+        <div style="background: #f2ede3; padding: 3rem;">
+          <p style="font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: #8a8076; margin-bottom: 2rem;">Experience</p>
+          <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0;">
+            {[
+              { name: "Luxury Presence", role: "Manager, Client Support" },
+              { name: "ecobee", role: "Senior Support Specialist" },
+              { name: "The Walt Disney Company", role: "Trainer, Cast Member" },
+              { name: "Vodafone", role: "Customer Operations" },
+            ].map((job) => (
+              <li style="display: flex; justify-content: space-between; align-items: baseline; padding: 1.1rem 0;">
+                <span style="font-size: 1rem; font-weight: 400; color: #1a1612;">{job.name}</span>
+                <span style="font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.06em; text-transform: uppercase; color: #8a8076;">{job.role}</span>
+              </li>
+            ))}
+          </ul>
+
+        </div>
+
+        <!-- Certs -->
+        <div style="background: #f2ede3; padding: 3rem;">
+          <p style="font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: #8a8076; margin-bottom: 2rem;">Certifications</p>
+
+          <div style="display: flex; flex-direction: column; gap: 2.5rem;">
+            <div>
+<ul style="list-style: none; padding: 1.1rem 0 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem;">
+                <li style="font-size: 0.95rem; color: #1a1612; font-weight: 300;">AWS Certified AI Practitioner</li>
+                <li style="font-size: 0.95rem; color: #1a1612; font-weight: 300;">Google People Management</li>
+              </ul>
+            </div>
+
+            <div>
+              <p style="font-family: 'Space Mono', monospace; font-size: 0.55rem; letter-spacing: 0.1em; text-transform: uppercase; color: #b5421a; margin-bottom: 1rem;">In Progress</p>
+              <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem;">
+                <li style="font-size: 0.95rem; color: #1a1612; font-weight: 300;">Google Project Management Professional</li>
+                <li style="font-size: 0.95rem; color: #1a1612; font-weight: 300;">PSPO I — Scrum.org</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
 
   </div>
 </Layout>
+
+<style>
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+  @media (max-width: 768px) {
+    .two-col { grid-template-columns: 1fr; }
+  }
+</style>
