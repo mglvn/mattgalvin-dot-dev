@@ -1,9 +1,10 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import { listPosts, parseTags, formatDate } from "../../lib/db";
+import { parseTags, formatDate } from "../../lib/db";
+import { getCachedPostsList } from "../../lib/posts-cache";
 
-const db = Astro.locals.runtime.env.DB;
-const projects = await listPosts(db, "projects", true);
+const { DB, POSTS_CACHE } = Astro.locals.runtime.env;
+const projects = await getCachedPostsList(POSTS_CACHE, DB, "projects");
 ---
 
 <Layout title="Work" description="Selected projects by Matt Galvin.">

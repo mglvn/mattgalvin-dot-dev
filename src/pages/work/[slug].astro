@@ -1,18 +1,18 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import { getPost, parseTags, formatDate } from "../../lib/db";
-import { marked } from "marked";
+import { parseTags, formatDate } from "../../lib/db";
+import { getCachedPost } from "../../lib/posts-cache";
 
 const { slug } = Astro.params;
-const db = Astro.locals.runtime.env.DB;
-const post = await getPost(db, slug!);
+const { DB, POSTS_CACHE } = Astro.locals.runtime.env;
+const cached = await getCachedPost(POSTS_CACHE, DB, slug!);
 
-if (!post || !post.published || post.type !== "projects") {
+if (!cached || !cached.post.published || cached.post.type !== "projects") {
   return new Response(null, { status: 404 });
 }
 
+const { post, html } = cached;
 const tags = parseTags(post.tags);
-const html = await marked(post.body);
 ---
 
 <Layout title={post.title} description={post.description}>

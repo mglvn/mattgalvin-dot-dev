@@ -1,15 +1,16 @@
 import type { APIRoute } from "astro";
 import { getPost, updatePost, deletePost } from "../../../lib/db";
+import { invalidatePost } from "../../../lib/posts-cache";
 
 export const GET: APIRoute = async ({ locals, params }) => {
-  const db = locals.runtime.env.DB;
-  const post = await getPost(db, params.slug!);
+  const { DB } = locals.runtime.env;
+  const post = await getPost(DB, params.slug!);
   if (!post) return Response.json({ error: "Not found" }, { status: 404 });
   return Response.json(post);
 };
 
 export const PUT: APIRoute = async ({ locals, params, request }) => {
-  const db = locals.runtime.env.DB;
+  const { DB, POSTS_CACHE } = locals.runtime.env;
   try {
     const body = await request.json() as Record<string, unknown>;
     const data: Record<string, unknown> = {};
@@ -23,7 +24,8 @@ export const PUT: APIRoute = async ({ locals, params, request }) => {
     if (body.date        !== undefined) data.date        = String(body.date);
     if (body.hero_image  !== undefined) data.hero_image  = String(body.hero_image);
 
-    const post = await updatePost(db, params.slug!, data as Parameters<typeof updatePost>[2]);
+    const post = await updatePost(DB, params.slug!, data as Parameters<typeof updatePost>[2]);
+    await invalidatePost(POSTS_CACHE, params.slug!);
     return Response.json(post);
   } catch (e: unknown) {
     const msg = e instanceof Error ? e.message : "Failed to update post";
@@ -32,8 +34,9 @@ export const PUT: APIRoute = async ({ locals, params, request }) => {
 };
 
 export const DELETE: APIRoute = async ({ locals, params }) => {
-  const db = locals.runtime.env.DB;
-  const ok = await deletePost(db, params.slug!);
+  const { DB, POSTS_CACHE } = locals.runtime.env;
+  const ok = await deletePost(DB, params.slug!);
   if (!ok) return Response.json({ error: "Not found" }, { status: 404 });
+  await invalidatePost(POSTS_CACHE, params.slug!);
   return new Response(null, { status: 204 });
 };
