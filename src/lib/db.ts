@@ -8,6 +8,7 @@ export interface Post {
   type: "blog" | "projects";
   status: "active" | "wip" | "archived";
   published: number; // 0 | 1
+  featured: number;  // 0 | 1
   date: string;
   hero_image: string;
   created_at: string;
@@ -66,8 +67,8 @@ export async function createPost(
 ): Promise<Post> {
   const result = await db
     .prepare(
-      `INSERT INTO posts (title, slug, body, description, tags, type, status, published, date, hero_image)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `INSERT INTO posts (title, slug, body, description, tags, type, status, published, featured, date, hero_image)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
        RETURNING *`
     )
     .bind(
@@ -79,6 +80,7 @@ export async function createPost(
       data.type,
       data.status,
       data.published,
+      data.featured ?? 0,
       data.date,
       data.hero_image ?? ""
     )

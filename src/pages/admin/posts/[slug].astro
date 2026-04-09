@@ -129,11 +129,18 @@ const viewHref = post.type === "projects" ? `/work/${post.slug}` : `/blog/${post
 
         <!-- Published + submit -->
         <div style="display: flex; align-items: center; justify-content: space-between; padding-top: 0.75rem; border-top: 1px solid #ccc5b8;">
-          <label style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer; font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: #8a8076;">
-            <input id="published" name="published" type="checkbox" checked={post.published === 1}
-              style="width: 15px; height: 15px; accent-color: #1a1612;" />
-            Published
-          </label>
+          <div style="display: flex; align-items: center; gap: 2rem;">
+            <label style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer; font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: #8a8076;">
+              <input id="published" name="published" type="checkbox" checked={post.published === 1}
+                style="width: 15px; height: 15px; accent-color: #1a1612;" />
+              Published
+            </label>
+            <label style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer; font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: #8a8076;">
+              <input id="featured" name="featured" type="checkbox" checked={post.featured === 1}
+                style="width: 15px; height: 15px; accent-color: #b5421a;" />
+              Featured
+            </label>
+          </div>
           <div style="display: flex; align-items: center; gap: 1rem;">
             <span id="save-status" style="font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.06em; color: #6a8a6a; opacity: 0; transition: opacity 0.3s;"></span>
             <button id="save-btn" type="submit" class="btn-save">Save changes</button>
@@ -263,6 +270,7 @@ const viewHref = post.type === "projects" ? `/work/${post.slug}` : `/blog/${post
           type:        document.getElementById("type").value,
           status:      document.getElementById("status-select").value,
           published:   document.getElementById("published").checked,
+          featured:    document.getElementById("featured").checked,
           date:        document.getElementById("date").value,
           hero_image:  document.getElementById("hero_image").value,
         };

@@ -4,9 +4,9 @@ import { formatDate, parseTags } from "../lib/db";
 import { getCachedPostsList } from "../lib/posts-cache";
 
 const { DB, POSTS_CACHE } = Astro.locals.runtime.env;
-const [recentPosts, projects] = await Promise.all([
+const [recentPosts, featuredProjects] = await Promise.all([
   getCachedPostsList(POSTS_CACHE, DB, "blog").then((p) => p.slice(0, 3)).catch(() => []),
-  getCachedPostsList(POSTS_CACHE, DB, "projects").then((p) => p.slice(0, 3)).catch(() => []),
+  getCachedPostsList(POSTS_CACHE, DB, "projects").then((p) => p.filter((p) => p.featured === 1).slice(0, 3)).catch(() => []),
 ]);
 
 ---
@@ -61,29 +61,25 @@ const [recentPosts, projects] = await Promise.all([
       </a>
     </div>
 
-    {projects.length === 0 ? (
-      <p style="font-size: 0.875rem; color: var(--color-smoke); font-weight: 300;">No projects yet.</p>
+    {featuredProjects.length === 0 ? (
+      <p style="font-size: 0.875rem; color: var(--color-smoke); font-weight: 300;">No featured projects yet.</p>
     ) : (
-      <div class="card-grid">
-        {projects.map((p, i) => (
-          <a href={`/work/${p.slug}`} class="work-card">
-            {p.hero_image && (
-              <div class="card-img-wrap">
-                <img src={p.hero_image} alt={p.title} class="card-img" loading="lazy" />
+      <div class="featured-grid">
+        {featuredProjects.map((p) => (
+          <a href={`/work/${p.slug}`} class="featured-card">
+            <div class="featured-card-inner">
+              <div>
+                <h3 class="featured-title font-display">{p.title}</h3>
+                {p.description && <p class="featured-desc">{p.description}</p>}
               </div>
-            )}
-            <div class="card-body">
-              <div class="card-meta">
-                <span class="card-num">{String(i + 1).padStart(2, "0")}</span>
-                <span class="card-year">{p.date.slice(0, 4)} ↗</span>
+              <div class="featured-footer">
+                {parseTags(p.tags).length > 0 && (
+                  <div class="card-tags">
+                    {parseTags(p.tags).map((t) => <span class="card-tag">{t}</span>)}
+                  </div>
+                )}
+                <span class="featured-arrow">↗</span>
               </div>
-              <h3 class="card-title font-display">{p.title}</h3>
-              {p.description && <p class="card-desc">{p.description}</p>}
-              {parseTags(p.tags).length > 0 && (
-                <div class="card-tags">
-                  {parseTags(p.tags).map((t) => <span class="card-tag">{t}</span>)}
-                </div>
-              )}
             </div>
           </a>
         ))}
@@ -150,89 +146,67 @@ const [recentPosts, projects] = await Promise.all([
     50% { transform: translateY(6px); }
   }
 
-  .card-grid {
+  .featured-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 2px;
-    background: var(--color-rule);
+    gap: 1rem;
   }
   @media (max-width: 768px) {
-    .card-grid { grid-template-columns: 1fr; }
+    .featured-grid { grid-template-columns: 1fr; }
   }
 
-  .work-card {
-    background: var(--color-cream);
-    display: flex;
-    flex-direction: column;
+  .featured-card {
+    display: block;
     text-decoration: none;
     color: inherit;
-    overflow: hidden;
+    border: 1px solid var(--color-rule);
+    background: var(--color-cream);
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .featured-card:hover {
+    border-color: var(--color-rust);
+    background: var(--color-paper);
   }
 
-  .card-img-wrap {
-    overflow: hidden;
-    aspect-ratio: 3 / 2;
-  }
-
-  .card-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: transform 0.4s ease;
-  }
-
-  .work-card:hover .card-img {
-    transform: scale(1.03);
-  }
-
-  .card-body {
-    padding: 1.5rem;
+  .featured-card-inner {
+    padding: 1.75rem;
     display: flex;
     flex-direction: column;
-    gap: 0.6rem;
-    flex: 1;
-  }
-
-  .card-meta {
-    display: flex;
     justify-content: space-between;
-    align-items: center;
+    gap: 2rem;
+    min-height: 180px;
   }
 
-  .card-num {
-    font-family: 'Source Code Pro', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.1em;
-    color: var(--color-rule);
-  }
-
-  .card-year {
-    font-family: 'Source Code Pro', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.08em;
-    color: var(--color-rust);
-  }
-
-  .card-title {
+  .featured-title {
     font-size: 1.5rem;
-    font-weight: 500;
-    letter-spacing: -0.01em;
+    font-weight: 400;
     line-height: 1.15;
-    margin: 0;
+    letter-spacing: -0.01em;
+    margin: 0 0 0.5rem;
     transition: color 0.2s;
   }
-
-  .work-card:hover .card-title {
+  .featured-card:hover .featured-title {
     color: var(--color-rust);
   }
 
-  .card-desc {
-    font-size: 0.875rem;
-    line-height: 1.65;
+  .featured-desc {
+    font-size: 0.85rem;
+    line-height: 1.6;
     color: var(--color-smoke);
     font-weight: 300;
     margin: 0;
+  }
+
+  .featured-footer {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+
+  .featured-arrow {
+    font-size: 1.1rem;
+    color: var(--color-rust);
+    line-height: 1;
   }
 
   .card-tags {
