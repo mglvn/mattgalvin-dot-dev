@@ -11,15 +11,12 @@ database_id = "9eb5cbf8-b5ac-47e1-a4a8-252cc98fc689"
 binding = "MEDIA"
 bucket_name = "mattgalvin-dot-dev-bucket"
 
-# Run `wrangler kv namespace create POSTS_CACHE` to create this, then paste the id below.
-[[kv_namespaces]]
-binding = "POSTS_CACHE"
-id = "d061c4e9e7ee4e59a7fc6a1f67fc9a31"
-
 # Secrets (set via `wrangler secret put`):
-#   ADMIN_PASSWORD — your admin login password
-#   SESSION_SECRET — long random string for signing session cookies
+#   ADMIN_PASSWORD    — your admin login password
+#   SESSION_SECRET    — long random string for signing session cookies
+#   DEPLOY_HOOK_URL   — Cloudflare Pages deploy hook URL (triggers rebuild on publish)
 #
 # For local dev, create a `.dev.vars` file:
 #   ADMIN_PASSWORD=yourpassword
 #   SESSION_SECRET=yoursecret
+#   DEPLOY_HOOK_URL=https://api.cloudflare.com/client/v4/pages/webhooks/deploy_hooks/...

@@ -1,10 +1,13 @@
 ---
-import Layout from "../../layouts/Layout.astro";
-import { formatDate } from "../../lib/db";
-import { getCachedPostsList } from "../../lib/posts-cache";
+export const prerender = true;
 
-const { DB, POSTS_CACHE } = Astro.locals.runtime.env;
-const posts = await getCachedPostsList(POSTS_CACHE, DB, "blog");
+import Layout from "../../layouts/Layout.astro";
+import { listPosts, formatDate } from "../../lib/db";
+import { getPlatformProxy } from "wrangler";
+
+const { env, dispose } = await getPlatformProxy<{ DB: D1Database }>();
+const posts = await listPosts(env.DB, "blog", true);
+await dispose();
 ---
 
 <Layout title="Blog" description="Writing by Matt Galvin on design, engineering, and the craft of building.">

@@ -1,14 +1,18 @@
+export const prerender = false;
 import type { APIRoute } from "astro";
 import { listPosts, createPost } from "../../../lib/db";
-import { invalidatePost } from "../../../lib/posts-cache";
+
+function triggerDeploy(hookUrl: string | undefined): void {
+  if (hookUrl) fetch(hookUrl, { method: "POST" }).catch(() => {});
+}
 
 export const GET: APIRoute = async ({ locals, url }) => {
-  const { DB } = locals.runtime.env;
+  const { DB: db } = locals.runtime.env;
   const type = url.searchParams.get("type") ?? undefined;
   const all = url.searchParams.get("all") === "1";
 
   try {
-    const posts = await listPosts(DB, type, !all);
+    const posts = await listPosts(db, type, !all);
     return Response.json(posts);
   } catch (e) {
     return Response.json({ error: "Failed to fetch posts" }, { status: 500 });
@@ -16,7 +20,7 @@ export const GET: APIRoute = async ({ locals, url }) => {
 };
 
 export const POST: APIRoute = async ({ locals, request }) => {
-  const { DB, POSTS_CACHE } = locals.runtime.env;
+  const { DB, DEPLOY_HOOK_URL } = locals.runtime.env;
 
   try {
     const body = await request.json() as Record<string, unknown>;
@@ -31,7 +35,7 @@ export const POST: APIRoute = async ({ locals, request }) => {
       published:   body.published ? 1 : 0,
       date:        String(body.date ?? new Date().toISOString().slice(0, 10)),
     });
-    await invalidatePost(POSTS_CACHE, post.slug);
+    triggerDeploy(DEPLOY_HOOK_URL);
     return Response.json(post, { status: 201 });
   } catch (e: unknown) {
     const msg = e instanceof Error ? e.message : "Failed to create post";

@@ -1,9 +1,11 @@
 ---
+export const prerender = false;
 import { listPosts, formatDate } from "../../lib/db";
 
 const db = Astro.locals.runtime.env.DB;
 const posts = await listPosts(db, undefined, false);
 ---
+export const prerender = false;
 
 <!doctype html>
 <html lang="en">

@@ -1,6 +1,10 @@
+export const prerender = false;
 import type { APIRoute } from "astro";
 import { getPost, updatePost, deletePost } from "../../../lib/db";
-import { invalidatePost } from "../../../lib/posts-cache";
+
+function triggerDeploy(hookUrl: string | undefined): void {
+  if (hookUrl) fetch(hookUrl, { method: "POST" }).catch(() => {});
+}
 
 export const GET: APIRoute = async ({ locals, params }) => {
   const { DB } = locals.runtime.env;
@@ -10,7 +14,7 @@ export const GET: APIRoute = async ({ locals, params }) => {
 };
 
 export const PUT: APIRoute = async ({ locals, params, request }) => {
-  const { DB, POSTS_CACHE } = locals.runtime.env;
+  const { DB, DEPLOY_HOOK_URL } = locals.runtime.env;
   try {
     const body = await request.json() as Record<string, unknown>;
     const data: Record<string, unknown> = {};
@@ -25,7 +29,7 @@ export const PUT: APIRoute = async ({ locals, params, request }) => {
     if (body.hero_image  !== undefined) data.hero_image  = String(body.hero_image);
 
     const post = await updatePost(DB, params.slug!, data as Parameters<typeof updatePost>[2]);
-    await invalidatePost(POSTS_CACHE, params.slug!);
+    triggerDeploy(DEPLOY_HOOK_URL);
     return Response.json(post);
   } catch (e: unknown) {
     const msg = e instanceof Error ? e.message : "Failed to update post";
@@ -34,9 +38,9 @@ export const PUT: APIRoute = async ({ locals, params, request }) => {
 };
 
 export const DELETE: APIRoute = async ({ locals, params }) => {
-  const { DB, POSTS_CACHE } = locals.runtime.env;
+  const { DB, DEPLOY_HOOK_URL } = locals.runtime.env;
   const ok = await deletePost(DB, params.slug!);
   if (!ok) return Response.json({ error: "Not found" }, { status: 404 });
-  await invalidatePost(POSTS_CACHE, params.slug!);
+  triggerDeploy(DEPLOY_HOOK_URL);
   return new Response(null, { status: 204 });
 };

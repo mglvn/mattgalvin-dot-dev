@@ -1,13 +1,14 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import { formatDate, parseTags } from "../lib/db";
-import { getCachedPostsList } from "../lib/posts-cache";
+export const prerender = true;
 
-const { DB, POSTS_CACHE } = Astro.locals.runtime.env;
-const [recentPosts, projects] = await Promise.all([
-  getCachedPostsList(POSTS_CACHE, DB, "blog").then((p) => p.slice(0, 3)).catch(() => []),
-  getCachedPostsList(POSTS_CACHE, DB, "projects").then((p) => p.slice(0, 3)).catch(() => []),
-]);
+import Layout from "../layouts/Layout.astro";
+import { listPosts, formatDate, parseTags } from "../lib/db";
+import { getPlatformProxy } from "wrangler";
+
+const { env, dispose } = await getPlatformProxy<{ DB: D1Database }>();
+const recentPosts = await listPosts(env.DB, "blog", true).then((p) => p.slice(0, 3)).catch(() => []);
+const projects = await listPosts(env.DB, "projects", true).then((p) => p.slice(0, 3)).catch(() => []);
+await dispose();
 
 ---
 

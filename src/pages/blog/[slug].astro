@@ -1,18 +1,20 @@
 ---
+export const prerender = false;
+
 import Layout from "../../layouts/Layout.astro";
-import { parseTags, formatDate } from "../../lib/db";
-import { getCachedPost } from "../../lib/posts-cache";
+import { getPost, parseTags, formatDate } from "../../lib/db";
+import { marked } from "marked";
 
 const { slug } = Astro.params;
-const { DB, POSTS_CACHE } = Astro.locals.runtime.env;
-const cached = await getCachedPost(POSTS_CACHE, DB, slug!);
+const { DB } = Astro.locals.runtime.env;
+const post = await getPost(DB, slug!);
 
-if (!cached || !cached.post.published) {
+if (!post || !post.published) {
   return new Response(null, { status: 404 });
 }
 
-const { post, html } = cached;
 const tags = parseTags(post.tags);
+const html = await marked(post.body);
 ---
 
 <Layout title={post.title} description={post.description}>
