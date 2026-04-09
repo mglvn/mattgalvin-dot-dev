@@ -1,16 +1,22 @@
 @import "tailwindcss";
+@import "@fontsource/libre-baskerville/400.css";
+@import "@fontsource/libre-baskerville/700.css";
+@import "@fontsource/libre-baskerville/400-italic.css";
+@import "@fontsource-variable/nunito";
+@import "@fontsource-variable/source-code-pro";
 
 @theme {
-  --color-paper: #f2ede3;
-  --color-ink: #1a1612;
-  --color-rust: #b5421a;
-  --color-smoke: #8a8076;
-  --color-cream: #e6e0d4;
-  --color-rule: #ccc5b8;
+  --color-paper: #1e1a14;
+  --color-ink: #f0e8d8;
+  --color-rust: #d4933a;
+  --color-smoke: #9a8e7a;
+  --color-cream: #2a2418;
+  --color-rule: #3a3226;
+  --color-paper-fade: #1e1a14ee;
 
-  --font-family-display: "Cormorant Garamond", Georgia, serif;
-  --font-family-body: "DM Sans", sans-serif;
-  --font-family-mono: "Space Mono", monospace;
+  --font-family-display: "Libre Baskerville", Georgia, serif;
+  --font-family-body: "Nunito", sans-serif;
+  --font-family-mono: "Source Code Pro", monospace;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -119,6 +125,7 @@ body::after {
 }
 .blog-row:hover {
   background: var(--color-cream);
+  color: var(--color-ink);
 }
 
 /* Display font utility */

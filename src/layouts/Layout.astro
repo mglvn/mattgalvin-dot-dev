@@ -1,4 +1,5 @@
 ---
+import "../styles/global.css";
 interface Props {
   title: string;
   description?: string;
@@ -14,16 +15,10 @@ const pathname = Astro.url.pathname;
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title === "Home" ? "Matt Galvin" : `${title} — Matt Galvin`}</title>
     <meta name="description" content={description} />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Space+Mono&display=swap"
-      rel="stylesheet"
-    />
   </head>
-  <body style="background: #f2ede3; min-height: 100vh;">
-    <nav style="position: fixed; top: 0; left: 0; right: 0; z-index: 50; padding: 1.5rem 2.5rem; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(to bottom, #f2ede3ee, transparent);">
-      <a href="/" style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 1.05rem; font-weight: 500; letter-spacing: 0.02em; color: #1a1612; text-decoration: none;">
+  <body style="background: var(--color-paper); min-height: 100vh;">
+    <nav style="position: fixed; top: 0; left: 0; right: 0; z-index: 50; padding: 1.5rem 2.5rem; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(to bottom, var(--color-paper-fade), transparent);">
+      <a href="/" style="font-family: 'Libre Baskerville', Georgia, serif; font-size: 1.05rem; font-weight: 500; letter-spacing: 0.02em; color: var(--color-ink); text-decoration: none;">
         Matt Galvin
       </a>
       <div style="display: flex; gap: 2.5rem; align-items: center;">
@@ -35,8 +30,8 @@ const pathname = Astro.url.pathname;
 
     <slot />
 
-    <footer style="padding: 3rem 2.5rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #ccc5b8; margin-top: 6rem;">
-      <span style="font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: #8a8076;">
+    <footer style="padding: 3rem 2.5rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-rule); margin-top: 6rem;">
+      <span style="font-family: 'Source Code Pro', monospace; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-smoke);">
         © 2026 Matt Galvin
       </span>
       <div style="display: flex; gap: 2rem;">
@@ -48,6 +43,3 @@ const pathname = Astro.url.pathname;
   </body>
 </html>
 
-<style is:global>
-  @import "../styles/global.css";
-</style>
