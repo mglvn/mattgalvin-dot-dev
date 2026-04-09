@@ -14,7 +14,7 @@ bucket_name = "mattgalvin-dot-dev-bucket"
 # Run `wrangler kv namespace create POSTS_CACHE` to create this, then paste the id below.
 [[kv_namespaces]]
 binding = "POSTS_CACHE"
-id = "REPLACE_WITH_KV_NAMESPACE_ID"
+id = "d061c4e9e7ee4e59a7fc6a1f67fc9a31"
 
 # Secrets (set via `wrangler secret put`):
 #   ADMIN_PASSWORD — your admin login password
