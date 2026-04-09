@@ -1,14 +1,9 @@
 ---
-export const prerender = true;
-
 import Layout from "../layouts/Layout.astro";
 import { listPosts, formatDate, parseTags } from "../lib/db";
-import { getPlatformProxy } from "wrangler";
-
-const { env, dispose } = await getPlatformProxy<{ DB: D1Database }>();
-const recentPosts = await listPosts(env.DB, "blog", true).then((p) => p.slice(0, 3)).catch(() => []);
-const projects = await listPosts(env.DB, "projects", true).then((p) => p.slice(0, 3)).catch(() => []);
-await dispose();
+const { DB } = Astro.locals.runtime.env;
+const recentPosts = await listPosts(DB, "blog", true).then((p) => p.slice(0, 3)).catch(() => []);
+const projects = await listPosts(DB, "projects", true).then((p) => p.slice(0, 3)).catch(() => []);
 
 ---
 

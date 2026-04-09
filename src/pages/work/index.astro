@@ -1,13 +1,8 @@
 ---
-export const prerender = true;
-
 import Layout from "../../layouts/Layout.astro";
 import { listPosts, parseTags, formatDate } from "../../lib/db";
-import { getPlatformProxy } from "wrangler";
-
-const { env, dispose } = await getPlatformProxy<{ DB: D1Database }>();
-const projects = await listPosts(env.DB, "projects", true);
-await dispose();
+const { DB } = Astro.locals.runtime.env;
+const projects = await listPosts(DB, "projects", true);
 ---
 
 <Layout title="Work" description="Selected projects by Matt Galvin.">
