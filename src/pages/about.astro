@@ -3,34 +3,31 @@ import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout title="About" description="About Matt Galvin.">
-  <div style="padding-top: 10rem; padding-bottom: 6rem; padding-left: 2.5rem; padding-right: 2.5rem; max-width: 1200px; margin: 0 auto;">
+  <div style="padding-top: 10rem; padding-bottom: 6rem; padding-left: var(--px); padding-right: var(--px); max-width: 1200px; margin: 0 auto;">
 
-    <!-- Header -->
     <div class="anim-1" style="margin-bottom: 5rem;">
-<h1 class="font-display" style="font-size: clamp(3rem, 9vw, 9rem); font-weight: 300; line-height: 0.9; letter-spacing: -0.02em;">
-        <em style="font-style: italic; color: #b5421a;">About.</em>
+      <h1 class="font-display" style="font-size: clamp(3rem, 9vw, 9rem); font-weight: 300; line-height: 0.9; letter-spacing: -0.02em;">
+        <em style="font-style: italic; color: var(--color-rust);">About.</em>
       </h1>
     </div>
 
-    <div class="anim-2" style="display: flex; flex-direction: column; gap: 0; border-top: 1px solid #ccc5b8;">
+    <div class="anim-2" style="display: flex; flex-direction: column; gap: 0; border-top: 1px solid var(--color-rule);">
 
       <!-- Row 1: Photo | Bio -->
       <div class="two-col">
-        <!-- Photo -->
-        <div style="background: #f2ede3; padding: 3rem 0;">
+        <div class="col-box">
           <div style="aspect-ratio: 3/4; overflow: hidden;">
             <img src="/media/headshot.png" alt="Matt Galvin" style="width: 100%; height: 100%; object-fit: cover; display: block;" />
           </div>
         </div>
 
-        <!-- Bio -->
-        <div style="background: #f2ede3; padding: 3rem;">
-          <div style="display: flex; flex-direction: column; gap: 1.25rem; font-size: 0.95rem; line-height: 1.8; font-weight: 300; color: #3d3830;">
+        <div class="col-box">
+          <div style="display: flex; flex-direction: column; gap: 1.25rem; font-size: 0.95rem; line-height: 1.8; font-weight: 300; color: var(--color-smoke);">
             <p>
-              I've spent my career navigating complex digital ecosystems at scale. Currently, I lead a team of product experts at <strong style="font-weight: 500; color: #1a1612;">Luxury Presence</strong>, bridging the gap between high-value real estate clients and our product teams.
+              I've spent my career navigating complex digital ecosystems at scale. Currently, I lead a team of product experts at <strong style="font-weight: 500; color: var(--color-ink);">Luxury Presence</strong>, bridging the gap between high-value real estate clients and our product teams.
             </p>
             <p>
-              Before that, I spent time at <strong style="font-weight: 500; color: #1a1612;">The Walt Disney Company</strong> teaching new Cast Members how to create the best experiences in the world, and at <strong style="font-weight: 500; color: #1a1612;">ecobee</strong>, where I dove deep into the intersection of IoT and smart home energy. My foundation was built in the fast-paced consumer operations world at <strong style="font-weight: 500; color: #1a1612;">Vodafone</strong>.
+              Before that, I spent time at <strong style="font-weight: 500; color: var(--color-ink);">The Walt Disney Company</strong> teaching new Cast Members how to create the best experiences in the world, and at <strong style="font-weight: 500; color: var(--color-ink);">ecobee</strong>, where I dove deep into the intersection of IoT and smart home energy. My foundation was built in the fast-paced consumer operations world at <strong style="font-weight: 500; color: var(--color-ink);">Vodafone</strong>.
             </p>
             <p>
               My current focus is a rigorous period of professional development to bridge the gap between leadership and product strategy — combining formal certifications with hands-on tinkering to master the space where user needs meet technical architecture.
@@ -47,9 +44,8 @@ import Layout from "../layouts/Layout.astro";
       <!-- Row 2: Experience | Certs -->
       <div class="two-col">
 
-        <!-- Experience -->
-        <div style="background: #f2ede3; padding: 3rem;">
-          <p style="font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: #8a8076; margin-bottom: 2rem;">Experience</p>
+        <div class="col-box">
+          <p style="font-family: 'Source Code Pro', monospace; font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-smoke); margin-bottom: 2rem;">Experience</p>
           <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0;">
             {[
               { name: "Luxury Presence", role: "Manager, Client Support" },
@@ -57,32 +53,30 @@ import Layout from "../layouts/Layout.astro";
               { name: "The Walt Disney Company", role: "Trainer, Cast Member" },
               { name: "Vodafone", role: "Customer Operations" },
             ].map((job) => (
-              <li style="display: flex; justify-content: space-between; align-items: baseline; padding: 1.1rem 0;">
-                <span style="font-size: 1rem; font-weight: 400; color: #1a1612;">{job.name}</span>
-                <span style="font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.06em; text-transform: uppercase; color: #8a8076;">{job.role}</span>
+              <li style="display: flex; justify-content: space-between; align-items: baseline; padding: 1.1rem 0; border-bottom: 1px solid var(--color-rule); gap: 1rem;">
+                <span style="font-size: 1rem; font-weight: 400; color: var(--color-ink);">{job.name}</span>
+                <span style="font-family: 'Source Code Pro', monospace; font-size: 0.6rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--color-smoke); white-space: nowrap;">{job.role}</span>
               </li>
             ))}
           </ul>
-
         </div>
 
-        <!-- Certs -->
-        <div style="background: #f2ede3; padding: 3rem;">
-          <p style="font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: #8a8076; margin-bottom: 2rem;">Certifications</p>
+        <div class="col-box">
+          <p style="font-family: 'Source Code Pro', monospace; font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-smoke); margin-bottom: 2rem;">Certifications</p>
 
           <div style="display: flex; flex-direction: column; gap: 2.5rem;">
             <div>
-<ul style="list-style: none; padding: 1.1rem 0 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem;">
-                <li style="font-size: 0.95rem; color: #1a1612; font-weight: 300;">AWS Certified AI Practitioner</li>
-                <li style="font-size: 0.95rem; color: #1a1612; font-weight: 300;">Google People Management</li>
+              <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem;">
+                <li style="font-size: 0.95rem; color: var(--color-ink); font-weight: 300;">AWS Certified AI Practitioner</li>
+                <li style="font-size: 0.95rem; color: var(--color-ink); font-weight: 300;">Google People Management</li>
               </ul>
             </div>
 
             <div>
-              <p style="font-family: 'Space Mono', monospace; font-size: 0.55rem; letter-spacing: 0.1em; text-transform: uppercase; color: #b5421a; margin-bottom: 1rem;">In Progress</p>
+              <p style="font-family: 'Source Code Pro', monospace; font-size: 0.55rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-rust); margin-bottom: 1rem;">In Progress</p>
               <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem;">
-                <li style="font-size: 0.95rem; color: #1a1612; font-weight: 300;">Google Project Management Professional</li>
-                <li style="font-size: 0.95rem; color: #1a1612; font-weight: 300;">PSPO I — Scrum.org</li>
+                <li style="font-size: 0.95rem; color: var(--color-ink); font-weight: 300;">Google Project Management Professional</li>
+                <li style="font-size: 0.95rem; color: var(--color-ink); font-weight: 300;">PSPO I — Scrum.org</li>
               </ul>
             </div>
           </div>
@@ -99,8 +93,25 @@ import Layout from "../layouts/Layout.astro";
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 0;
+    border-bottom: 1px solid var(--color-rule);
   }
   @media (max-width: 768px) {
     .two-col { grid-template-columns: 1fr; }
+  }
+
+  .col-box {
+    padding: 3rem;
+    border-right: 1px solid var(--color-rule);
+  }
+  .col-box:last-child {
+    border-right: none;
+  }
+  @media (max-width: 768px) {
+    .col-box {
+      padding: 2rem var(--px);
+      border-right: none;
+      border-bottom: 1px solid var(--color-rule);
+    }
+    .col-box:last-child { border-bottom: none; }
   }
 </style>

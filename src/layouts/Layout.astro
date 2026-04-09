@@ -17,11 +17,11 @@ const pathname = Astro.url.pathname;
     <meta name="description" content={description} />
   </head>
   <body style="background: var(--color-paper); min-height: 100vh;">
-    <nav style="position: fixed; top: 0; left: 0; right: 0; z-index: 50; padding: 1.5rem 2.5rem; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(to bottom, var(--color-paper-fade), transparent);">
+    <nav style="position: fixed; top: 0; left: 0; right: 0; z-index: 50; padding: 1.5rem var(--px); display: flex; justify-content: space-between; align-items: center; background: linear-gradient(to bottom, var(--color-paper-fade), transparent);">
       <a href="/" style="font-family: 'Libre Baskerville', Georgia, serif; font-size: 1.05rem; font-weight: 500; letter-spacing: 0.02em; color: var(--color-ink); text-decoration: none;">
         Matt Galvin
       </a>
-      <div style="display: flex; gap: 2.5rem; align-items: center;">
+      <div class="nav-links">
         <a href="/work" class="nav-link" class:list={[{ "!text-ink": pathname.startsWith("/work") }]}>Projects</a>
         <a href="/blog" class="nav-link" class:list={[{ "!text-ink": pathname.startsWith("/blog") }]}>Blog</a>
         <a href="/about" class="nav-link" class:list={[{ "!text-ink": pathname === "/about" }]}>About</a>
@@ -30,7 +30,7 @@ const pathname = Astro.url.pathname;
 
     <slot />
 
-    <footer style="padding: 3rem 2.5rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-rule); margin-top: 6rem;">
+    <footer class="site-footer">
       <span style="font-family: 'Source Code Pro', monospace; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-smoke);">
         © 2026 Matt Galvin
       </span>
